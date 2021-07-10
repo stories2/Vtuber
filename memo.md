@@ -1,5 +1,11 @@
 # Cubism
 
+## Deformer, green box disappear. Where it goes?
+
+<video src="https://user-images.githubusercontent.com/16532326/125171292-6f421580-e1ee-11eb-88d7-0bf4c5c4c10a.mov"></video>
+
+Change `edit level` to 2. It will show what you expect.
+
 ## Show / Hide deformer red box and green box
 
 <video src="https://user-images.githubusercontent.com/16532326/125170991-bdeeb000-e1ec-11eb-9aae-52a3deb0f1ae.mov" ></video>
