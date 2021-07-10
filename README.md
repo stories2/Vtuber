@@ -7,7 +7,7 @@ Yea! Fucking vtuber
 
 
 <div align="center">
-  그림 과정
+  Drawing process
   
   <video src="https://user-images.githubusercontent.com/16532326/125163806-d9948f00-e1c9-11eb-8a25-132106ee93af.mp4" width="960" alt="drawing" mute="mute" autoplay="autoplay"/>
 </div>
