@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <img src="16532326.jpeg" alt="" srcset="">
+    <canvas width="460" height="460" ></canvas>
+    <!-- https://blog.tensorflow.org/2020/11/iris-landmark-tracking-in-browser-with-MediaPipe-and-TensorFlowJS.html -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.6.0/dist/tf.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
+
+    <script>
+        function imgLoader(url) {
+            return new Promise((resolve, reject) => {
+                let img = new Image();
+                img.onload = () => {
+                    resolve(img);
+                }
+                img.src = url;
+            })
+        }
+        // If you are using NPM, first require the model. If you are using script tags, you can skip this step because `faceLandmarksDetection` will already be available in the global scope.
+        // const faceLandmarksDetection = require('@tensorflow-models/face-landmarks-detection');
+        
+        // Load the faceLandmarksDetection model assets.
+        faceLandmarksDetection.load(
+            faceLandmarksDetection.SupportedPackages.mediapipeFacemesh)
+            .then(model => {
+        
+                // Pass in a video stream to the model to obtain an array of detected faces from the MediaPipe graph.
+                // For Node users, the `estimateFaces` API also accepts a `tf.Tensor3D`, or an ImageData object.
+                const img = document.querySelector("img");
+                return model.estimateFaces({ input: img });
+            })
+            .then(face => {
+                console.log('face', face);
+
+                const canvas = document.querySelector('canvas');
+                const ctx = canvas.getContext('2d');
+
+                canvas.width = 460;
+                canvas.height = 460;
+                imgLoader('16532326.jpeg')
+                .then(srcImg => {
+
+                    ctx.strokeStyle = 'rgba(0, 255, 0, 1)';
+                    ctx.fillStyle = 'rgba(0, 255, 0, 1)';
+                    ctx.drawImage(srcImg, 0, 0)
+                    
+                    face.forEach(person => {
+                        ctx.strokeRect(person.boundingBox.topLeft[0], person.boundingBox.topLeft[1], 
+                                        person.boundingBox.bottomRight[0] - person.boundingBox.topLeft[0], person.boundingBox.bottomRight[1] - person.boundingBox.topLeft[1])
+                        
+                        person.scaledMesh.forEach(xyz => {
+                            // ctx.strokeRect(xyz[0], xyz[1], 1, 1);
+                            // ctx.arc(xyz[0], xyz[1], 2, 0, Math.PI * 2, true);
+                            ctx.beginPath();
+                            ctx.arc(xyz[0], xyz[1], 1, 0, 2 * Math.PI);
+                            ctx.stroke();
+                        })
+                    })
+
+                })
+            })
+    </script>
+</body>
+</html>
