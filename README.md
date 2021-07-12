@@ -2,7 +2,7 @@
 Yea! Fucking vtuber
 
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/16532326/125159428-3b48ff00-e1b2-11eb-887d-97522dbfb476.png" width="960"/>
+  <img src="https://github.com/stories2/Vtuber/blob/main/assets/cubism/randompose-min.gif?raw=true" width="360"/>
 </div>
 
 
