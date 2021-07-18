@@ -5,14 +5,24 @@ import { FaceLandmarkFrameSkip } from './lappdefine';
 export class FaceManager {
 
     videoEle: HTMLVideoElement;
+    canvasEle: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D;
     isVideoReady: Boolean;
     model: any;
     cnt: number;
 
-    constructor(video: HTMLVideoElement) {
+    constructor(video: HTMLVideoElement, canvas: HTMLCanvasElement) {
         this.videoEle = video;
         this.isVideoReady = false;
         this.cnt = 0;
+
+        this.canvasEle = canvas;
+        this.ctx = this.canvasEle.getContext('2d');
+
+        this.canvasEle.width = 640;
+        this.canvasEle.height = 480;
+        this.ctx.strokeStyle = 'rgba(0, 255, 0, 1)';
+        this.ctx.fillStyle = 'rgba(0, 255, 0, 1)';
     }
 
     openCam() {
@@ -59,11 +69,28 @@ export class FaceManager {
             .then(face => {
                 if (face && face.length > 0) {
                     // console.log('[FaceManager] [detectLandmark] Face', face);
+                    this.renderLandmark(face);
                 } else {
                     console.warn('[FaceManager] [detectLandmark] No face detected!');
                 }
             })
         }
         this.cnt ++;
+    }
+
+    renderLandmark(face: any) {
+        this.ctx.clearRect(0, 0, this.canvasEle.width, this.canvasEle.height);
+        face.forEach(person => {
+            this.ctx.strokeRect(person.boundingBox.topLeft[0], person.boundingBox.topLeft[1], 
+                            person.boundingBox.bottomRight[0] - person.boundingBox.topLeft[0], person.boundingBox.bottomRight[1] - person.boundingBox.topLeft[1])
+            
+            person.scaledMesh.forEach(xyz => {
+                // ctx.strokeRect(xyz[0], xyz[1], 1, 1);
+                // ctx.arc(xyz[0], xyz[1], 2, 0, Math.PI * 2, true);
+                this.ctx.beginPath();
+                this.ctx.arc(xyz[0], xyz[1], 1, 0, 2 * Math.PI);
+                this.ctx.stroke();
+            })
+        })
     }
 }

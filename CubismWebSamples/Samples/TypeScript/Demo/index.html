@@ -17,6 +17,16 @@
       width: 640px;
       height: 480px;
       z-index: 2;
+      opacity: 0;
+    }
+
+    canvas#camCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 640px;
+      height: 480px;
+      z-index: 3;
     }
   </style>
   <!-- Pollyfill script -->
@@ -28,6 +38,7 @@
 </head>
 <body>
   <video id="cam" controls autoplay muted></video>
+  <canvas id="camCanvas"></canvas>
   <canvas id="live2dCanvas"></canvas>
 </body>
 </html>

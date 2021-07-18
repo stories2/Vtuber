@@ -110,7 +110,8 @@ export class LAppDelegate {
     // Cubism SDKの初期化
     this.initializeCubism();
     
-    faceManager = new FaceManager(document.getElementById('cam') as HTMLVideoElement);
+    faceManager = new FaceManager(document.getElementById('cam') as HTMLVideoElement, 
+                                  document.getElementById('camCanvas') as HTMLCanvasElement);
     faceManager.openCam()
     .then((camResult) => {
       if (camResult) {
