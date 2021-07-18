@@ -177,6 +177,7 @@ export class LAppDelegate {
       // 描画更新
       this._view.render();
 
+      faceManager.detectLandmark();
       // ループのために再帰呼び出し
       requestAnimationFrame(loop);
     };
