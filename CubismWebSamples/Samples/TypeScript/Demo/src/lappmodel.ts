@@ -494,6 +494,8 @@ export class LAppModel extends CubismUserModel {
       this._dragX * this._dragY * -30
     );
 
+    this._model.addParameterValueById(this._idParamMouthOpenY, faceManager.lipsOpen);
+
     // ドラッグによる体の向きの調整
     this._model.addParameterValueById(
       this._idParamBodyAngleX,

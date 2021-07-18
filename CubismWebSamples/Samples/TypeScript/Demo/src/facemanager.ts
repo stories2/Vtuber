@@ -15,6 +15,8 @@ export class FaceManager {
     yNormal: number;
     yNormalRaw: number;
 
+    lipsOpen: number;
+
     constructor(video: HTMLVideoElement, canvas: HTMLCanvasElement) {
         this.videoEle = video;
         this.isVideoReady = false;
@@ -32,6 +34,8 @@ export class FaceManager {
         this.xNormalRaw = 0;
         this.yNormal = 0;
         this.yNormalRaw = 0;
+
+        this.lipsOpen = 0;
     }
 
     openCam() {
@@ -80,6 +84,7 @@ export class FaceManager {
                     // console.log('[FaceManager] [detectLandmark] Face', face);
                     this.renderLandmark(face);
                     this.detectFacePosition(face);
+                    this.detectMouthOpen(face);
                 } else {
                     console.warn('[FaceManager] [detectLandmark] No face detected!');
                 }
@@ -98,6 +103,28 @@ export class FaceManager {
             this.yNormal += (this.yNormalRaw - this.yNormal) / 3;
             
             // console.log(`xRegular, yRegular: ${this.xNormal - 0.5}, ${this.yNormal - 0.5}`)
+        })
+    }
+
+    detectMouthOpen(face: any) {
+        face.forEach(person => {
+            // console.log('face', person);
+
+            let lipUpperY = -0x7fffffff;
+            let lipLowerY = 0x7fffffff;
+            person.annotations.lipsLowerOuter.forEach(dots => {
+                if (dots[1] < lipLowerY)
+                    lipLowerY = dots[1]
+                if (dots[1] > lipUpperY)
+                    lipUpperY = dots[1]
+
+                this.lipsOpen = (lipUpperY - lipLowerY) / 30
+            });
+            if (this.lipsOpen > 1)
+                this.lipsOpen = 1;
+            else if (this.lipsOpen < 0)
+                this.lipsOpen = 0;
+            // console.log(`[FaceManager] [detectMouthOpen] lower: ${lipLowerY}, upper: ${lipUpperY}, diff: ${lipUpperY - lipLowerY}, normal: ${this.lipsOpen}`);
         })
     }
 
