@@ -1,4 +1,4 @@
-# Cubism Web Samples
+# Cubism Web Samples 
 
 Live2D Cubism 4 Editor で出力したモデルを表示するアプリケーションのサンプル実装です。
 
