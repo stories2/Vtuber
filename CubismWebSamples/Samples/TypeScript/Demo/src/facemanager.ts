@@ -96,7 +96,7 @@ export class FaceManager {
     detectFacePosition(face: any) {
         face.forEach(person => {
             const [x, y, ] = person.annotations.noseTip[0];
-            this.xNormalRaw = (x / (person.boundingBox.topLeft[0] + person.boundingBox.bottomRight[0]) - 0.5) * 50
+            this.xNormalRaw = (x / (person.boundingBox.topLeft[0] + person.boundingBox.bottomRight[0]) - 0.5) * 25
             this.yNormalRaw = -(y / (person.boundingBox.topLeft[1] + person.boundingBox.bottomRight[1]) - 0.5) * 50
 
             this.xNormal += (this.xNormalRaw - this.xNormal) / 3;
