@@ -1,4 +1,12 @@
-
+.vscode
+live2dcubismcore.*
+Haru/
+Hiyori/
+Mark/
+Natori/
+Rice/
+back_class_normal.png
+icon_gear.png
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,intellij,intellij+iml,intellij+all,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,visualstudiocode,intellij,intellij+iml,intellij+all,node
 
