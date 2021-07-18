@@ -40,6 +40,8 @@ import { LAppPal } from './lapppal';
 import { TextureInfo } from './lapptexturemanager';
 import { LAppWavFileHandler } from './lappwavfilehandler';
 
+import { faceManager } from './lappdelegate';
+
 enum LoadStep {
   LoadAssets,
   LoadModel,
@@ -442,8 +444,12 @@ export class LAppModel extends CubismUserModel {
     this._userTimeSeconds += deltaTimeSeconds;
 
     this._dragManager.update(deltaTimeSeconds);
-    this._dragX = this._dragManager.getX();
-    this._dragY = this._dragManager.getY();
+    // this._dragX = this._dragManager.getX();
+    // this._dragY = this._dragManager.getY();
+    this._dragX = faceManager.xNormal;
+    this._dragY = faceManager.yNormal;
+
+    console.log(`drag XY: ${this._dragX}, ${this._dragY}`);
 
     // モーションによるパラメータ更新の有無
     let motionUpdated = false;

@@ -10,6 +10,10 @@ export class FaceManager {
     isVideoReady: Boolean;
     model: any;
     cnt: number;
+    xNormal: number;
+    xNormalRaw: number;
+    yNormal: number;
+    yNormalRaw: number;
 
     constructor(video: HTMLVideoElement, canvas: HTMLCanvasElement) {
         this.videoEle = video;
@@ -23,6 +27,11 @@ export class FaceManager {
         this.canvasEle.height = 480;
         this.ctx.strokeStyle = 'rgba(0, 255, 0, 1)';
         this.ctx.fillStyle = 'rgba(0, 255, 0, 1)';
+
+        this.xNormal = 0;
+        this.xNormalRaw = 0;
+        this.yNormal = 0;
+        this.yNormalRaw = 0;
     }
 
     openCam() {
@@ -70,12 +79,26 @@ export class FaceManager {
                 if (face && face.length > 0) {
                     // console.log('[FaceManager] [detectLandmark] Face', face);
                     this.renderLandmark(face);
+                    this.detectFacePosition(face);
                 } else {
                     console.warn('[FaceManager] [detectLandmark] No face detected!');
                 }
             })
         }
         this.cnt ++;
+    }
+
+    detectFacePosition(face: any) {
+        face.forEach(person => {
+            const [x, y, ] = person.annotations.noseTip[0];
+            this.xNormalRaw = (x / (person.boundingBox.topLeft[0] + person.boundingBox.bottomRight[0]) - 0.5) * 50
+            this.yNormalRaw = -(y / (person.boundingBox.topLeft[1] + person.boundingBox.bottomRight[1]) - 0.5) * 50
+
+            this.xNormal += (this.xNormalRaw - this.xNormal) / 3;
+            this.yNormal += (this.yNormalRaw - this.yNormal) / 3;
+            
+            // console.log(`xRegular, yRegular: ${this.xNormal - 0.5}, ${this.yNormal - 0.5}`)
+        })
     }
 
     renderLandmark(face: any) {
