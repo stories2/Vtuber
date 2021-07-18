@@ -111,7 +111,12 @@ export class LAppDelegate {
     this.initializeCubism();
     
     faceManager = new FaceManager(document.getElementById('cam') as HTMLVideoElement);
-    faceManager.openCam();
+    faceManager.openCam()
+    .then((camResult) => {
+      if (camResult) {
+      }
+    })
+    faceManager.loadLandmarkModel();
 
     return true;
   }

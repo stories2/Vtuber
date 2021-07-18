@@ -27,6 +27,8 @@
   },
   "dependencies": {
     "@tensorflow-models/face-landmarks-detection": "0.0.3",
+    "@tensorflow/tfjs-backend-webgl": "^3.8.0",
+    "@tensorflow/tfjs-converter": "^3.8.0",
     "@tensorflow/tfjs-core": "^3.8.0",
     "whatwg-fetch": "^3.6.2"
   }
