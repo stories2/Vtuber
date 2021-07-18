@@ -449,7 +449,7 @@ export class LAppModel extends CubismUserModel {
     this._dragX = faceManager.xNormal;
     this._dragY = faceManager.yNormal;
 
-    console.log(`drag XY: ${this._dragX}, ${this._dragY}`);
+    // console.log(`drag XY: ${this._dragX}, ${this._dragY}`);
 
     // モーションによるパラメータ更新の有無
     let motionUpdated = false;
@@ -857,6 +857,9 @@ export class LAppModel extends CubismUserModel {
     this._idParamBodyAngleX = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamBodyAngleX
     );
+    this._idParamMouthOpenY = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamMouthOpenY
+    );
 
     this._state = LoadStep.LoadAssets;
     this._expressionCount = 0;
@@ -885,6 +888,7 @@ export class LAppModel extends CubismUserModel {
   _idParamEyeBallX: CubismIdHandle; // パラメータID: ParamEyeBallX
   _idParamEyeBallY: CubismIdHandle; // パラメータID: ParamEyeBAllY
   _idParamBodyAngleX: CubismIdHandle; // パラメータID: ParamBodyAngleX
+  _idParamMouthOpenY: CubismIdHandle; // ParamMouthOpenY
 
   _state: number; // 現在のステータス管理用
   _expressionCount: number; // 表情データカウント
