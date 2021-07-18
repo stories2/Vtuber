@@ -6,6 +6,7 @@
  */
 
 import { CubismFramework, Option } from '@framework/live2dcubismframework';
+import { FaceManager } from './facemanager';
 
 import * as LAppDefine from './lappdefine';
 import { LAppLive2DManager } from './lapplive2dmanager';
@@ -13,6 +14,7 @@ import { LAppPal } from './lapppal';
 import { LAppTextureManager } from './lapptexturemanager';
 import { LAppView } from './lappview';
 
+export let faceManager: FaceManager = null;
 export let canvas: HTMLCanvasElement = null;
 export let s_instance: LAppDelegate = null;
 export let gl: WebGLRenderingContext = null;
@@ -53,7 +55,7 @@ export class LAppDelegate {
    */
   public initialize(): boolean {
     // キャンバスの作成
-    canvas = document.createElement('canvas');
+    canvas = document.getElementById('live2dCanvas') as HTMLCanvasElement;
     if (LAppDefine.CanvasSize === 'auto') {
       this._resizeCanvas();
     } else {
@@ -76,8 +78,8 @@ export class LAppDelegate {
       return false;
     }
 
-    // キャンバスを DOM に追加
-    document.body.appendChild(canvas);
+    // // キャンバスを DOM に追加
+    // document.body.appendChild(canvas);
 
     if (!frameBuffer) {
       frameBuffer = gl.getParameter(gl.FRAMEBUFFER_BINDING);
@@ -107,6 +109,9 @@ export class LAppDelegate {
 
     // Cubism SDKの初期化
     this.initializeCubism();
+    
+    faceManager = new FaceManager(document.getElementById('cam') as HTMLVideoElement);
+    faceManager.openCam();
 
     return true;
   }
@@ -152,7 +157,7 @@ export class LAppDelegate {
       LAppPal.updateTime();
 
       // 画面の初期化
-      gl.clearColor(0.0, 0.0, 0.0, 1.0);
+      gl.clearColor(0.0, 0.0, 0.0, 0.0);
 
       // 深度テストを有効化
       gl.enable(gl.DEPTH_TEST);

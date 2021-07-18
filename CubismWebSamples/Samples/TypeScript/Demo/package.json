@@ -26,6 +26,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "@tensorflow-models/face-landmarks-detection": "0.0.3",
     "whatwg-fetch": "^3.6.2"
   }
 }
