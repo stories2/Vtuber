@@ -862,6 +862,12 @@ export class LAppModel extends CubismUserModel {
     this._idParamMouthOpenY = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamMouthOpenY
     );
+    this._idParamEyeROpen = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamEyeROpen
+    );
+    this._idParamEyeLOpen = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamEyeLOpen
+    )
 
     this._state = LoadStep.LoadAssets;
     this._expressionCount = 0;
@@ -891,6 +897,8 @@ export class LAppModel extends CubismUserModel {
   _idParamEyeBallY: CubismIdHandle; // パラメータID: ParamEyeBAllY
   _idParamBodyAngleX: CubismIdHandle; // パラメータID: ParamBodyAngleX
   _idParamMouthOpenY: CubismIdHandle; // ParamMouthOpenY
+  _idParamEyeROpen: CubismIdHandle; // ParamEyeROpen
+  _idParamEyeLOpen: CubismIdHandle; // ParamEyeLOpen
 
   _state: number; // 現在のステータス管理用
   _expressionCount: number; // 表情データカウント
