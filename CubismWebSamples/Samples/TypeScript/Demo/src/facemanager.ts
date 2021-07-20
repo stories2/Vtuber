@@ -76,6 +76,10 @@ export class FaceManager {
                 .then(() => console.log('[FaceManager] [loadLandmarkModel] model loaded'))
     }
 
+    faceRect(humanFace) {
+        return [humanFace.boundingBox.topLeft[0] + humanFace.boundingBox.bottomRight[0], humanFace.boundingBox.topLeft[1] + humanFace.boundingBox.bottomRight[1]]
+    }
+
     detectLandmark() {
         if (this.isVideoReady && this.model && this.cnt % FaceLandmarkFrameSkip === 0) {
             this.model.estimateFaces({ input: this.videoEle })
@@ -85,6 +89,7 @@ export class FaceManager {
                     this.renderLandmark(face);
                     this.detectFacePosition(face);
                     this.detectMouthOpen(face);
+                    this.detectEyeLOpen(face);
                 } else {
                     console.warn('[FaceManager] [detectLandmark] No face detected!');
                 }
@@ -96,8 +101,9 @@ export class FaceManager {
     detectFacePosition(face: any) {
         face.forEach(person => {
             const [x, y, ] = person.annotations.noseTip[0];
-            this.xNormalRaw = -(x / (person.boundingBox.topLeft[0] + person.boundingBox.bottomRight[0]) - 0.5) * 10
-            this.yNormalRaw = -(y / (person.boundingBox.topLeft[1] + person.boundingBox.bottomRight[1]) - 0.5) * 50
+            const [w, h] = this.faceRect(person);
+            this.xNormalRaw = -(x / w - 0.5) * 10
+            this.yNormalRaw = -(y / h - 0.5) * 50
 
             this.xNormal += (this.xNormalRaw - this.xNormal) / 3;
             this.yNormal += (this.yNormalRaw - this.yNormal) / 3;
@@ -126,6 +132,26 @@ export class FaceManager {
                 this.lipsOpen = 0;
             // console.log(`[FaceManager] [detectMouthOpen] lower: ${lipLowerY}, upper: ${lipUpperY}, diff: ${lipUpperY - lipLowerY}, normal: ${this.lipsOpen}`);
         })
+    }
+
+    detectEyeLOpen(face: any) {
+        face.forEach(person => {
+            // console.log('face', person);
+            const [w, h] = this.faceRect(person);
+
+            let eyeUpperY = -0x7fffffff;
+            let eyeLowerY = 0x7fffffff;
+            person.annotations.leftEyeUpper2.forEach(dots => {
+                if (dots[1] > eyeUpperY)
+                    eyeUpperY = dots[1];
+            })
+            person.annotations.leftEyeLower2.forEach(dots => {
+                if (dots[1] < eyeLowerY) 
+                    eyeLowerY = dots[1];
+            })
+            
+            console.log(`[FaceManager] [detectEyeLOpen] up: ${eyeUpperY}, low: ${eyeLowerY}, diff: ${eyeUpperY - eyeLowerY}, ratio: ${((eyeUpperY - eyeLowerY) / h * 100)}`);
+        });
     }
 
     renderLandmark(face: any) {
