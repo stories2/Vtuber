@@ -82,6 +82,17 @@ export class FaceManager {
                 .then(() => console.log('[FaceManager] [loadLandmarkModel] model loaded'))
     }
 
+    // https://www.pyimagesearch.com/2017/04/24/eye-blink-detection-opencv-python-dlib/
+    calcEyeAspectRatio(points: [number, number][]): number { //p1 ~ p6
+        if (!points || points.length !== 6) return 0;
+
+        return (this.euclideanDistance(points[1], points[5]) + this.euclideanDistance(points[2], points[4])) / 2 * this.euclideanDistance(points[0], points[3]);
+    }
+
+    euclideanDistance(pointA: [number, number], pointB: [number, number]): number {
+        return Math.sqrt(Math.pow(pointA[0] - pointB[0], 2) + Math.pow(pointA[1] - pointB[1], 2));
+    }
+
     faceRect(humanFace) {
         return [humanFace.boundingBox.topLeft[0] + humanFace.boundingBox.bottomRight[0], humanFace.boundingBox.topLeft[1] + humanFace.boundingBox.bottomRight[1]]
     }
@@ -146,24 +157,22 @@ export class FaceManager {
     detectEyeLOpen(face: any) {
         face.forEach(person => {
             // console.log('face', person);
-            const [w, h] = this.faceRect(person);
+            
+            const eyeRatio = this.calcEyeAspectRatio([
+                person.scaledMesh[263],
+                person.scaledMesh[387],
+                person.scaledMesh[385],
+                person.scaledMesh[362],
+                person.scaledMesh[380],
+                person.scaledMesh[373],
+            ])
+            this.eyeLOpen = (eyeRatio - 150) / 50
 
-            let eyeUpperY = 0x7fffffff;
-            let eyeLowerY = -0x7fffffff;
-            person.annotations.leftEyeUpper2.forEach(dots => {
-                if (dots[1] < eyeUpperY)
-                    eyeUpperY = dots[1];
-            })
-            person.annotations.leftEyeLower2.forEach(dots => {
-                if (dots[1] > eyeLowerY) 
-                    eyeLowerY = dots[1];
-            })
-            this.eyeLOpen = ((((eyeLowerY - eyeUpperY) / h * 1000) - 24) / 6)
-
-            if (this.eyeLOpen > 1)
+            if (this.eyeLOpen > .5)
                 this.eyeLOpen = 1;
             else if (this.eyeLOpen < 0)
                 this.eyeLOpen = 0;
+            console.log(`[FaceManager] [detectEyeLOpen] eyeRatio: ${eyeRatio}, this.eyeROpen: ${this.eyeLOpen}`);
             // console.log(`[FaceManager] [detectEyeLOpen] up: ${eyeUpperY}, low: ${eyeLowerY}, diff: ${eyeLowerY - eyeUpperY}, ratio: ${((eyeLowerY - eyeUpperY) / h * 1000)}, isOpen: ${this.eyeLOpen}`);
         });
     }
@@ -171,24 +180,22 @@ export class FaceManager {
     detectEyeROpen(face: any) {
         face.forEach(person => {
             // console.log('face', person);
-            const [w, h] = this.faceRect(person);
+            
+            const eyeRatio = this.calcEyeAspectRatio([
+                person.scaledMesh[33],
+                person.scaledMesh[160],
+                person.scaledMesh[158],
+                person.scaledMesh[133],
+                person.scaledMesh[153],
+                person.scaledMesh[144],
+            ])
+            this.eyeROpen = (eyeRatio - 150) / 50
 
-            let eyeUpperY = 0x7fffffff;
-            let eyeLowerY = -0x7fffffff;
-            person.annotations.rightEyeUpper2.forEach(dots => {
-                if (dots[1] < eyeUpperY)
-                    eyeUpperY = dots[1];
-            })
-            person.annotations.rightEyeLower2.forEach(dots => {
-                if (dots[1] > eyeLowerY) 
-                    eyeLowerY = dots[1];
-            })
-            this.eyeROpen = ((((eyeLowerY - eyeUpperY) / h * 1000) - 24) / 6)
-
-            if (this.eyeROpen > 1)
+            if (this.eyeROpen > .5)
                 this.eyeROpen = 1;
             else if (this.eyeROpen < 0)
                 this.eyeROpen = 0;
+            console.log(`[FaceManager] [detectEyeROpen] eyeRatio: ${eyeRatio}, this.eyeROpen: ${this.eyeROpen}`);
             // console.log(`[FaceManager] [detectEyeROpen] up: ${eyeUpperY}, low: ${eyeLowerY}, diff: ${eyeLowerY - eyeUpperY}, ratio: ${((eyeLowerY - eyeUpperY) / h * 1000)}, isOpen: ${this.eyeROpen}`);
         });
     }
