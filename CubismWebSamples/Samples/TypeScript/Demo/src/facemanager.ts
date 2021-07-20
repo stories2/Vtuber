@@ -172,7 +172,7 @@ export class FaceManager {
                 this.eyeLOpen = 1;
             else if (this.eyeLOpen < 0)
                 this.eyeLOpen = 0;
-            console.log(`[FaceManager] [detectEyeLOpen] eyeRatio: ${eyeRatio}, this.eyeROpen: ${this.eyeLOpen}`);
+            // console.log(`[FaceManager] [detectEyeLOpen] eyeRatio: ${eyeRatio}, this.eyeROpen: ${this.eyeLOpen}`);
             // console.log(`[FaceManager] [detectEyeLOpen] up: ${eyeUpperY}, low: ${eyeLowerY}, diff: ${eyeLowerY - eyeUpperY}, ratio: ${((eyeLowerY - eyeUpperY) / h * 1000)}, isOpen: ${this.eyeLOpen}`);
         });
     }
@@ -195,7 +195,7 @@ export class FaceManager {
                 this.eyeROpen = 1;
             else if (this.eyeROpen < 0)
                 this.eyeROpen = 0;
-            console.log(`[FaceManager] [detectEyeROpen] eyeRatio: ${eyeRatio}, this.eyeROpen: ${this.eyeROpen}`);
+            // console.log(`[FaceManager] [detectEyeROpen] eyeRatio: ${eyeRatio}, this.eyeROpen: ${this.eyeROpen}`);
             // console.log(`[FaceManager] [detectEyeROpen] up: ${eyeUpperY}, low: ${eyeLowerY}, diff: ${eyeLowerY - eyeUpperY}, ratio: ${((eyeLowerY - eyeUpperY) / h * 1000)}, isOpen: ${this.eyeROpen}`);
         });
     }

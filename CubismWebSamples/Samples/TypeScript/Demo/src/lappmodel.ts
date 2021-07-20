@@ -229,6 +229,8 @@ export class LAppModel extends CubismUserModel {
       if (this._modelSetting.getEyeBlinkParameterCount() > 0) {
         this._eyeBlink = CubismEyeBlink.create(this._modelSetting);
         this._state = LoadStep.SetupBreath;
+      } else {
+        console.warn('[lappmodel] [setupEyeBlink] No eye blink.');
       }
 
       // callback
@@ -299,6 +301,7 @@ export class LAppModel extends CubismUserModel {
     // EyeBlinkIds
     const setupEyeBlinkIds = (): void => {
       const eyeBlinkIdCount: number = this._modelSetting.getEyeBlinkParameterCount();
+      console.log(`[lappmodel] [setupEyeBlinkIds] eyeBlinkIdCount: ${eyeBlinkIdCount}`)
 
       for (let i = 0; i < eyeBlinkIdCount; ++i) {
         this._eyeBlinkIds.pushBack(
