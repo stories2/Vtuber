@@ -133,24 +133,21 @@ export class FaceManager {
     detectMouthOpen(face: any) {
         face.forEach(person => {
             // console.log('face', person);
+            const mouthRatio = this.calcEyeAspectRatio([
+                person.scaledMesh[61],
+                person.scaledMesh[37],
+                person.scaledMesh[267],
+                person.scaledMesh[291],
+                person.scaledMesh[314],
+                person.scaledMesh[84],
+            ])
+            this.lipsOpen = (mouthRatio - 1000) / 1000
 
-            let lipUpperY = 0x7fffffff;
-            let lipLowerY = -0x7fffffff;
-            const [w, h] = this.faceRect(person);
-            person.annotations.lipsLowerOuter.forEach(dots => {
-                if (dots[1] > lipLowerY)
-                    lipLowerY = dots[1]
-            });
-            person.annotations.lipsUpperOuter.forEach(dots => {
-                if (dots[1] < lipUpperY)
-                    lipUpperY = dots[1]
-            })
-            this.lipsOpen = (lipLowerY - lipUpperY) / h * 20 // 0.05: open
-            if (this.lipsOpen > 1)
+            if (this.lipsOpen > .5)
                 this.lipsOpen = 1;
             else if (this.lipsOpen < 0)
                 this.lipsOpen = 0;
-            // console.log(`[FaceManager] [detectMouthOpen] lower: ${lipLowerY}, upper: ${lipUpperY}, diff: ${lipLowerY - lipUpperY}, normal: ${this.lipsOpen}, ratio: ${(lipLowerY - lipUpperY) / h}`);
+            // console.log(`[FaceManager] [detectMouthOpen] mouthRatio: ${mouthRatio}`);
         })
     }
 
