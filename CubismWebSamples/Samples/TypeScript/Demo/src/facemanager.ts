@@ -116,21 +116,23 @@ export class FaceManager {
         face.forEach(person => {
             // console.log('face', person);
 
-            let lipUpperY = -0x7fffffff;
-            let lipLowerY = 0x7fffffff;
+            let lipUpperY = 0x7fffffff;
+            let lipLowerY = -0x7fffffff;
+            const [w, h] = this.faceRect(person);
             person.annotations.lipsLowerOuter.forEach(dots => {
-                if (dots[1] < lipLowerY)
+                if (dots[1] > lipLowerY)
                     lipLowerY = dots[1]
-                if (dots[1] > lipUpperY)
-                    lipUpperY = dots[1]
-
-                this.lipsOpen = (lipUpperY - lipLowerY) / 30
             });
+            person.annotations.lipsUpperOuter.forEach(dots => {
+                if (dots[1] < lipUpperY)
+                    lipUpperY = dots[1]
+            })
+            this.lipsOpen = (lipLowerY - lipUpperY) / h * 20 // 0.05: open
             if (this.lipsOpen > 1)
                 this.lipsOpen = 1;
             else if (this.lipsOpen < 0)
                 this.lipsOpen = 0;
-            // console.log(`[FaceManager] [detectMouthOpen] lower: ${lipLowerY}, upper: ${lipUpperY}, diff: ${lipUpperY - lipLowerY}, normal: ${this.lipsOpen}`);
+            // console.log(`[FaceManager] [detectMouthOpen] lower: ${lipLowerY}, upper: ${lipUpperY}, diff: ${lipLowerY - lipUpperY}, normal: ${this.lipsOpen}, ratio: ${(lipLowerY - lipUpperY) / h}`);
         })
     }
 
@@ -150,7 +152,7 @@ export class FaceManager {
                     eyeLowerY = dots[1];
             })
             
-            console.log(`[FaceManager] [detectEyeLOpen] up: ${eyeUpperY}, low: ${eyeLowerY}, diff: ${eyeUpperY - eyeLowerY}, ratio: ${((eyeUpperY - eyeLowerY) / h * 100)}`);
+            // console.log(`[FaceManager] [detectEyeLOpen] up: ${eyeUpperY}, low: ${eyeLowerY}, diff: ${eyeUpperY - eyeLowerY}, ratio: ${((eyeUpperY - eyeLowerY) / h * 100)}`);
         });
     }
 
