@@ -113,7 +113,7 @@ export class LAppModel extends CubismUserModel {
     if (this._modelSetting.getModelFileName() != '') {
       const modelFileName = this._modelSetting.getModelFileName();
 
-      fetch(`${this._modelHomeDir}${modelFileName}`)
+      fetch(modelFileName.includes('http') ? modelFileName : `${this._modelHomeDir}${modelFileName}`)
         .then(response => response.arrayBuffer())
         .then(arrayBuffer => {
           this.loadModel(arrayBuffer);
