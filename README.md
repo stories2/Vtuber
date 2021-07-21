@@ -18,6 +18,7 @@ Yea! Fucking vtuber.
 
 ## Todo List
 
+- [x] Draw my live2d model.
 - [x] Intergrate with Live2d Web SDK (use sample source)
 - [x] Face detection.
 - [x] Change angle what you are looking.
