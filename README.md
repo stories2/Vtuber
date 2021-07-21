@@ -4,6 +4,9 @@
 [![demo site](https://img.shields.io/website?label=Demo%20website&style=flat-square&url=https%3A%2F%2Fhazimenya.gapmoe.net%2FDemo)](https://hazimenya.gapmoe.net/Demo/)
 ![top lang](https://img.shields.io/github/languages/top/stories2/Vtuber?style=flat-square)
 
+![twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Fhazime_nya)
+[![Youtube Badge](https://img.shields.io/badge/Youtube-ff0000?style=flat-square&logo=youtube&link=https://www.youtube.com/channel/UC-7E61IdYVFvgGHdr-EKEbQ)](https://www.youtube.com/channel/UC-7E61IdYVFvgGHdr-EKEbQ)
+
 Yea! Fucking vtuber.
 
 
