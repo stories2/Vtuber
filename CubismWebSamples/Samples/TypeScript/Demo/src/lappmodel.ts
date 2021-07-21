@@ -498,8 +498,6 @@ export class LAppModel extends CubismUserModel {
     );
 
     this._model.addParameterValueById(this._idParamMouthOpenY, faceManager.lipsOpen);
-    this._model.addParameterValueById(this._idParamEyeLOpen, 0);
-    this._model.addParameterValueById(this._idParamEyeROpen, faceManager.eyeROpen);
     // this._model.addParameterValueById('ParamAngleZ', 30);
     // this._model.addParameterValueById('ParamBrowLY', -1);
     // console.log('LR', faceManager.eyeLOpen, faceManager.eyeROpen)
