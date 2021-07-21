@@ -3,6 +3,8 @@ Yea! Fucking vtuber.
 
 [Demo link](https://hazimenya.gapmoe.net/Demo/)
 
+<strong> Use pc / mac recommended. Too slow in mobile devices </strong>
+
 <div align="center">
   <img src="https://user-images.githubusercontent.com/16532326/126064685-a4638861-273f-4bbb-aa8c-8d07bacc7884.gif"/>
 </div>
