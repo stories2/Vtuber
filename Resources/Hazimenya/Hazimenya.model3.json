@@ -1,7 +1,7 @@
 {
 	"Version": 3,
 	"FileReferences": {
-		"Moc": "hazimenya.moc3",
+		"Moc": "https://github.com/stories2/Vtuber/raw/main/Resources/Hazimenya/hazimenya.moc3",
 		"Textures": [
 			"hazimenya.2048/texture_00.png"
 		],
