@@ -1,7 +1,11 @@
 # Vtuber
+
+![last commit](https://img.shields.io/github/last-commit/stories2/Vtuber?style=flat-square)
+[![demo site](https://img.shields.io/website?label=Demo%20website&style=flat-square&url=https%3A%2F%2Fhazimenya.gapmoe.net%2FDemo)](https://hazimenya.gapmoe.net/Demo/)
+![top lang](https://img.shields.io/github/languages/top/stories2/Vtuber?style=flat-square)
+
 Yea! Fucking vtuber.
 
-[Demo link](https://hazimenya.gapmoe.net/Demo/)
 
 <strong> Use pc / mac recommended. Too slow in mobile devices </strong>
 
