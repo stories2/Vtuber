@@ -17,6 +17,7 @@ Yea! Fucking vtuber.
 - [ ] Electron desktop capturing.
 - [ ] Move character rendering position.
 - [ ] Calibrate feature.
+- [ ] Responsive UI
 
 <div align="center">
   Drawing process
