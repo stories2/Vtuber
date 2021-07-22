@@ -36,3 +36,6 @@ Yea! Fucking vtuber.
   <video src="https://user-images.githubusercontent.com/16532326/125163806-d9948f00-e1c9-11eb-8a25-132106ee93af.mp4" width="50%" alt="drawing" mute="mute" autoplay="autoplay"/>
 </div>
 
+## Live2d Cubism
+
+![스크린샷 2021-07-23 오전 12 34 29](https://user-images.githubusercontent.com/16532326/126666829-26c7a2b0-ddad-47ac-aa29-9863acfd774d.png)
