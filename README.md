@@ -39,3 +39,8 @@ Yea! Fucking vtuber.
 ## Live2d Cubism
 
 ![스크린샷 2021-07-23 오전 12 34 29](https://user-images.githubusercontent.com/16532326/126666829-26c7a2b0-ddad-47ac-aa29-9863acfd774d.png)
+
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/16532326/126668395-19ca9092-d0a4-4ce5-8131-492162fe4462.gif"/>
+</div>
+
