@@ -20,6 +20,8 @@ export class FaceManager {
     eyeLOpen: number;
     eyeROpen: number;
 
+    isCamAvailable: boolean;
+
     constructor(video: HTMLVideoElement, canvas: HTMLCanvasElement) {
         this.videoEle = video;
         this.isVideoReady = false;
@@ -42,6 +44,8 @@ export class FaceManager {
 
         this.eyeLOpen = 0;
         this.eyeROpen = 0;
+
+        this.isCamAvailable = false;
     }
 
     openCam() {
@@ -57,6 +61,7 @@ export class FaceManager {
                         this.videoEle.srcObject = stream;
                         this.videoEle.addEventListener('loadeddata', (event) => {
                             this.isVideoReady = true;
+                            this.isCamAvailable = true;
                             console.log('[FaceManager] [openCam] video loadeddata');
                         })
                         resolve(true);

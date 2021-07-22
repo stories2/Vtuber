@@ -447,10 +447,14 @@ export class LAppModel extends CubismUserModel {
     this._userTimeSeconds += deltaTimeSeconds;
 
     this._dragManager.update(deltaTimeSeconds);
-    // this._dragX = this._dragManager.getX();
-    // this._dragY = this._dragManager.getY();
-    this._dragX = faceManager.xNormal;
-    this._dragY = faceManager.yNormal;
+
+    if (faceManager.isCamAvailable) {
+      this._dragX = faceManager.xNormal;
+      this._dragY = faceManager.yNormal;
+    } else {
+      this._dragX = this._dragManager.getX();
+      this._dragY = this._dragManager.getY();
+    }
 
     // console.log(`drag XY: ${this._dragX}, ${this._dragY}`);
 
@@ -497,14 +501,11 @@ export class LAppModel extends CubismUserModel {
       this._dragX * this._dragY * -30
     );
 
-    this._model.addParameterValueById(this._idParamMouthOpenY, faceManager.lipsOpen);
-    // this._model.addParameterValueById('ParamAngleZ', 30);
-    // this._model.addParameterValueById('ParamBrowLY', -1);
-    // console.log('LR', faceManager.eyeLOpen, faceManager.eyeROpen)
-    this._model.setParameterValueById(this._idParamEyeLOpen, faceManager.eyeLOpen);
-    this._model.setParameterValueById(this._idParamEyeROpen, faceManager.eyeROpen);
-    // "ParamEyeROpen"
-    // console.log(this._model);
+    if (faceManager.isCamAvailable) {
+      this._model.addParameterValueById(this._idParamMouthOpenY, faceManager.lipsOpen);
+      this._model.setParameterValueById(this._idParamEyeLOpen, faceManager.eyeLOpen);
+      this._model.setParameterValueById(this._idParamEyeROpen, faceManager.eyeROpen);
+    }
 
     // ドラッグによる体の向きの調整
     this._model.addParameterValueById(
