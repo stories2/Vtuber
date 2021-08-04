@@ -54,7 +54,7 @@ export class FaceManager {
                 navigator.mediaDevices.getUserMedia({video: {
                     width: 640,
                     height: 480,
-                    facingMode: 'environment'
+                    facingMode: 'user'
                 }})
                 .then((stream: MediaStream) => {
                     if (this.videoEle) {
