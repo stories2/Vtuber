@@ -35,6 +35,13 @@
       transform: scaleX(-1);
       pointer-events: none;
     }
+
+    div.pos-move-switch {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 9;
+    }
   </style>
   <!-- Pollyfill script -->
   <script src="https://unpkg.com/core-js-bundle@3.6.1/minified.js"></script>
@@ -47,5 +54,9 @@
   <video id="cam" controls autoplay muted></video>
   <canvas id="camCanvas"></canvas>
   <canvas id="live2dCanvas"></canvas>
+  <div class="form-check form-switch pos-move-switch">
+    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+    <label class="form-check-label" for="flexSwitchCheckDefault">Move</label>
+  </div>
 </body>
 </html>

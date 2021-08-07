@@ -7,6 +7,8 @@
 
 import { LAppDelegate } from './lappdelegate';
 import * as LAppDefine from './lappdefine';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 /**
  * ブラウザロード後の処理
