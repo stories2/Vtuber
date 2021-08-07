@@ -7,6 +7,7 @@
 
 import { CubismFramework, Option } from '@framework/live2dcubismframework';
 import { FaceManager } from './facemanager';
+import { InterfaceManager } from './interfacemanager';
 
 import * as LAppDefine from './lappdefine';
 import { LAppLive2DManager } from './lapplive2dmanager';
@@ -14,6 +15,7 @@ import { LAppPal } from './lapppal';
 import { LAppTextureManager } from './lapptexturemanager';
 import { LAppView } from './lappview';
 
+export let interfaceManager: InterfaceManager = null;
 export let faceManager: FaceManager = null;
 export let canvas: HTMLCanvasElement = null;
 export let s_instance: LAppDelegate = null;
@@ -109,6 +111,8 @@ export class LAppDelegate {
 
     // Cubism SDKの初期化
     this.initializeCubism();
+
+    interfaceManager = new InterfaceManager(null);
     
     faceManager = new FaceManager(document.getElementById('cam') as HTMLVideoElement, 
                                   document.getElementById('camCanvas') as HTMLCanvasElement);
