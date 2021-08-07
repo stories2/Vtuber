@@ -10,7 +10,7 @@ import { ACubismMotion } from '@framework/motion/acubismmotion';
 import { csmVector } from '@framework/type/csmvector';
 
 import * as LAppDefine from './lappdefine';
-import { canvas } from './lappdelegate';
+import { canvas, interfaceManager } from './lappdelegate';
 import { LAppModel } from './lappmodel';
 import { LAppPal } from './lapppal';
 
@@ -154,7 +154,10 @@ export class LAppLive2DManager {
         }
       }
 
+      // console.log('projection', projection);
       model.update();
+      projection.translate(interfaceManager.posX, interfaceManager.posY);
+      projection.scale(height / width * interfaceManager.scale, 1.0 * interfaceManager.scale);
       model.draw(projection); // 参照渡しなのでprojectionは変質する。
     }
   }

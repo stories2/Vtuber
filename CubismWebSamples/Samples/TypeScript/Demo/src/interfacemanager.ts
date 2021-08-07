@@ -7,8 +7,15 @@ export class InterfaceManager {
 
     isMoveEnabled: boolean;
 
+    posX: number;
+    posY: number;
+    scale: number;
+
     constructor(canvasEle: HTMLCanvasElement) {
         this.isMoveEnabled = false;
+        this.posX = 0;
+        this.posY = 0;
+        this.scale = 1;
 
         this.canvasEle = canvasEle;
 
@@ -30,7 +37,13 @@ export class InterfaceManager {
 
         this.moveSwitch.addEventListener('change', (e) => this.isMoveEnabled = (e.target as any).checked);
 
-        this.btnZoomIn.addEventListener('click', (e) => console.log('zoom in', e));
-        this.btnZoomOut.addEventListener('click', (e) => console.log('zoom out', e));
+        this.btnZoomIn.addEventListener('click', (e) => {
+            if (this.scale < 2.0)
+                this.scale += 0.05;
+        });
+        this.btnZoomOut.addEventListener('click', (e) => {
+            if (this.scale > 0.5)
+                this.scale -= 0.05;
+        });
     }
 }
