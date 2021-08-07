@@ -27,6 +27,8 @@ export class InterfaceManager {
         this.posY = 0;
         this.scale = 1;
 
+        this.loadProfile();
+
         this.canvasEle = canvasEle;
         this.touchManager = touchManager;
 
@@ -40,21 +42,25 @@ export class InterfaceManager {
     initEvent() {
         this.canvasEle.addEventListener('touchstart', (e) => this.moveStart(e.touches[0].clientX, e.touches[0].clientY))
         this.canvasEle.addEventListener('touchmove', (e) => this.movePos(e.touches[0].clientX, e.touches[0].clientY));
-        this.canvasEle.addEventListener('touchend', (e) => this.isMove = false);
-        this.canvasEle.addEventListener('touchcancel', (e) => this.isMove = false);
+        this.canvasEle.addEventListener('touchend', (e) => {this.isMove = false; this.saveProfile()});
+        this.canvasEle.addEventListener('touchcancel', (e) => {this.isMove = false; this.saveProfile()});
         this.canvasEle.addEventListener('mousedown', (e) => this.moveStart(e.clientX, e.clientY));
         this.canvasEle.addEventListener('mousemove', (e) => this.movePos(e.clientX, e.clientY));
-        this.canvasEle.addEventListener('mouseup', (e) => this.isMove = false);
+        this.canvasEle.addEventListener('mouseup', (e) => {this.isMove = false; this.saveProfile()});
 
         this.moveSwitch.addEventListener('change', (e) => this.isMoveEnabled = (e.target as any).checked);
 
         this.btnZoomIn.addEventListener('click', (e) => {
-            if (this.scale < 3.0)
+            if (this.scale < 3.0) {
+                this.saveProfile();
                 this.scale += 0.05;
+            }
         });
         this.btnZoomOut.addEventListener('click', (e) => {
-            if (this.scale > 0.5)
+            if (this.scale > 0.5) {
+                this.saveProfile();
                 this.scale -= 0.05;
+            }
         });
     }
 
@@ -77,5 +83,18 @@ export class InterfaceManager {
             this.lastX = x;
             this.lastY = y;
         }
+    }
+
+    saveProfile() {
+        localStorage.setItem('scale', this.scale.toString());
+        localStorage.setItem('posX', this.posX.toString());
+        localStorage.setItem('posY', this.posY.toString());
+    }
+
+    loadProfile() {
+        this.scale = Number.parseFloat(localStorage.getItem('scale') || `1.0`);
+        this.posX = Number.parseFloat(localStorage.getItem('posX') || `0`);
+        this.posY = Number.parseFloat(localStorage.getItem('posY') || `0`);
+        console.log(this.scale, this.posX, this.posY);
     }
 }
