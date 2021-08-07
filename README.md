@@ -26,7 +26,7 @@ Yea! Fucking vtuber.
 - [x] Eye blinking detection.
 - [x] Mouth close / open detection.
 - [ ] Electron desktop capturing.
-- [ ] Move character rendering position.
+- [x] Move character rendering position.
 - [ ] Calibrate feature.
 - [ ] Responsive UI
 
