@@ -22,6 +22,8 @@ export class FaceManager {
 
     isCamAvailable: boolean;
 
+    camStream: MediaStream;
+
     constructor(video: HTMLVideoElement, canvas: HTMLCanvasElement) {
         this.videoEle = video;
         this.isVideoReady = false;
@@ -46,6 +48,21 @@ export class FaceManager {
         this.eyeROpen = 0;
 
         this.isCamAvailable = false;
+
+        this.camStream = null;
+    }
+
+    closeCam() {
+        if (this.videoEle.srcObject && this.camStream) {
+            this.isVideoReady = false;
+            this.isCamAvailable = false;
+            this.camStream.getTracks().forEach( (track) => {
+                track.stop();
+            });
+            this.camStream = null;
+        } else {
+            console.warn('[facemanager] [closeCam] No cam stream available.')
+        }
     }
 
     openCam() {
@@ -58,6 +75,7 @@ export class FaceManager {
                 }})
                 .then((stream: MediaStream) => {
                     if (this.videoEle) {
+                        this.camStream = stream;
                         this.videoEle.srcObject = stream;
                         this.videoEle.addEventListener('loadeddata', (event) => {
                             this.isVideoReady = true;

@@ -111,17 +111,11 @@ export class LAppDelegate {
 
     // Cubism SDKの初期化
     this.initializeCubism();
-
-    interfaceManager = new InterfaceManager(canvas, this._view._touchManager);
     
     faceManager = new FaceManager(document.getElementById('cam') as HTMLVideoElement, 
                                   document.getElementById('camCanvas') as HTMLCanvasElement);
-    faceManager.openCam()
-    .then((camResult) => {
-      if (camResult) {
-      }
-    })
     faceManager.loadLandmarkModel();
+    interfaceManager = new InterfaceManager(canvas, this._view._touchManager, faceManager);
 
     return true;
   }

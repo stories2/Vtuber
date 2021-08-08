@@ -1,0 +1,60 @@
+
+    html, body {
+        margin: 0;
+        overflow: hidden;
+        touch-action: manipulation;
+      }
+  
+      video#cam {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 320px;
+        height: 240px;
+        z-index: 2;
+        opacity: 0;
+        pointer-events: none;
+      }
+  
+      canvas#camCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 320px;
+        height: 240px;
+        z-index: 3;
+        transform: scaleX(-1);
+        pointer-events: none;
+      }
+  
+      div.cam-switch {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 9;
+      }
+  
+      div.pos-move-switch {
+        position: absolute;
+        top: 48px;
+        right: 16px;
+        z-index: 9;
+      }
+  
+      button.btn-zoom-in {
+        position: absolute;
+        top: 80px;
+        right: 16px;
+        z-index: 9;
+        width: 36px;
+        height: 36px;
+      }
+  
+      button.btn-zoom-out {
+        position: absolute;
+        top: 122px;
+        right: 16px;
+        z-index: 9;
+        width: 36px;
+        height: 36px;
+      }

@@ -7,61 +7,8 @@
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://user-images.githubusercontent.com/16532326/126825187-fc6f2fbd-4bab-4afe-8dc8-62d7a723d779.jpg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-  <title>TypeScript HTML App</title>
-  <style>
-    html, body {
-      margin: 0;
-      overflow: hidden;
-      touch-action: manipulation;
-    }
-
-    video#cam {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 320px;
-      height: 240px;
-      z-index: 2;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    canvas#camCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 320px;
-      height: 240px;
-      z-index: 3;
-      transform: scaleX(-1);
-      pointer-events: none;
-    }
-
-    div.pos-move-switch {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      z-index: 9;
-    }
-
-    button.btn-zoom-in {
-      position: absolute;
-      top: 48px;
-      right: 16px;
-      z-index: 9;
-      width: 36px;
-      height: 36px;
-    }
-
-    button.btn-zoom-out {
-      position: absolute;
-      top: 90px;
-      right: 16px;
-      z-index: 9;
-      width: 36px;
-      height: 36px;
-    }
-  </style>
+  <title>Hazimenya Vtuber Demo</title>
+  <link rel="stylesheet" href="style.css">
   <!-- Pollyfill script -->
   <script src="https://unpkg.com/core-js-bundle@3.6.1/minified.js"></script>
   <!-- Live2DCubismCore script -->
@@ -73,6 +20,10 @@
   <video id="cam" controls autoplay muted></video>
   <canvas id="camCanvas"></canvas>
   <canvas id="live2dCanvas"></canvas>
+  <div class="form-check form-switch cam-switch">
+    <input class="form-check-input" type="checkbox" id="camSwitch">
+    <label class="form-check-label" for="camSwitch">Cam</label>
+  </div>
   <div class="form-check form-switch pos-move-switch">
     <input class="form-check-input" type="checkbox" id="moveSwitch">
     <label class="form-check-label" for="moveSwitch">Move</label>

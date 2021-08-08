@@ -1,8 +1,10 @@
+import { FaceManager } from "./facemanager";
 import { TouchManager } from "./touchmanager";
 
 export class InterfaceManager {
     canvasEle: HTMLCanvasElement;
 
+    camSwitch: HTMLElement;
     moveSwitch: HTMLElement;
     btnZoomIn: HTMLButtonElement;
     btnZoomOut: HTMLButtonElement;
@@ -17,8 +19,9 @@ export class InterfaceManager {
     scale: number;
 
     touchManager: TouchManager;
+    faceManager: FaceManager;
 
-    constructor(canvasEle: HTMLCanvasElement, touchManager: TouchManager) {
+    constructor(canvasEle: HTMLCanvasElement, touchManager: TouchManager, faceManager: FaceManager) {
         this.isMoveEnabled = false;
         this.isMove = false;
         this.lastX = 0;
@@ -31,7 +34,9 @@ export class InterfaceManager {
 
         this.canvasEle = canvasEle;
         this.touchManager = touchManager;
+        this.faceManager = faceManager;
 
+        this.camSwitch = document.querySelector('div.cam-switch');
         this.moveSwitch = document.querySelector('div.pos-move-switch');
         this.btnZoomIn = document.querySelector('button.btn-zoom-in');
         this.btnZoomOut = document.querySelector('button.btn-zoom-out');
@@ -48,6 +53,8 @@ export class InterfaceManager {
         this.canvasEle.addEventListener('mousemove', (e) => this.movePos(e.clientX, e.clientY));
         this.canvasEle.addEventListener('mouseup', (e) => {this.isMove = false; this.saveProfile()});
 
+        this.camSwitch.addEventListener('change', (e) => this.toggleCam());
+
         this.moveSwitch.addEventListener('change', (e) => this.isMoveEnabled = (e.target as any).checked);
 
         this.btnZoomIn.addEventListener('click', (e) => {
@@ -62,6 +69,18 @@ export class InterfaceManager {
                 this.scale -= 0.05;
             }
         });
+    }
+
+    toggleCam() {
+        if (this.faceManager.isVideoReady) {
+            this.faceManager.closeCam();
+        } else {
+            this.faceManager.openCam()
+                .then((camResult) => {
+                    if (camResult) {
+                    }
+                })
+        }
     }
 
     posNormalize(x: number, y: number) {
