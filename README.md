@@ -14,7 +14,7 @@ Yea! Fucking vtuber.
 <strong> Use pc / mac recommended. Too slow in mobile devices </strong>
 
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/16532326/126064685-a4638861-273f-4bbb-aa8c-8d07bacc7884.gif"/>
+  <img src="https://user-images.githubusercontent.com/16532326/130592592-a7aac1f9-c9a7-44c8-ab54-c8665ff8b780.gif"/>
 </div>
 
 ## Todo List
@@ -25,7 +25,7 @@ Yea! Fucking vtuber.
 - [x] Change angle what you are looking.
 - [x] Eye blinking detection.
 - [x] Mouth close / open detection.
-- [ ] Electron desktop capturing.
+- [x] Electron desktop capturing.
 - [x] Move character rendering position.
 - [ ] Calibrate feature.
 - [ ] Responsive UI
