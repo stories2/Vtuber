@@ -41,9 +41,16 @@
         z-index: 9;
       }
   
-      button.btn-zoom-in {
+      div.pos-share-switch {
         position: absolute;
         top: 80px;
+        right: 16px;
+        z-index: 9;
+      }
+  
+      button.btn-zoom-in {
+        position: absolute;
+        top: 122px;
         right: 16px;
         z-index: 9;
         width: 36px;
@@ -52,7 +59,7 @@
   
       button.btn-zoom-out {
         position: absolute;
-        top: 122px;
+        top: 160px;
         right: 16px;
         z-index: 9;
         width: 36px;
