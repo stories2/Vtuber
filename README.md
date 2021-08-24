@@ -29,6 +29,7 @@ Yea! Fucking vtuber.
 - [x] Move character rendering position.
 - [ ] Calibrate feature.
 - [ ] Responsive UI
+- [ ] Support PWA
 
 ## Drawing process
 <div align="center">
