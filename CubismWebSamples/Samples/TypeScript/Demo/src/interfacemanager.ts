@@ -6,8 +6,12 @@ export class InterfaceManager {
 
     camSwitch: HTMLElement;
     moveSwitch: HTMLElement;
+    shareSwitch: HTMLElement;
     btnZoomIn: HTMLButtonElement;
     btnZoomOut: HTMLButtonElement;
+
+    shareVideoEle: HTMLVideoElement;
+    shareStream: MediaStream;
 
     isMoveEnabled: boolean;
     isMove: boolean;
@@ -20,6 +24,17 @@ export class InterfaceManager {
 
     touchManager: TouchManager;
     faceManager: FaceManager;
+    
+    gdmOptions = {
+        video: {
+          cursor: "always"
+        },
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100
+        }
+    } as DisplayMediaStreamConstraints;
 
     constructor(canvasEle: HTMLCanvasElement, touchManager: TouchManager, faceManager: FaceManager) {
         this.isMoveEnabled = false;
@@ -38,8 +53,13 @@ export class InterfaceManager {
 
         this.camSwitch = document.querySelector('div.cam-switch');
         this.moveSwitch = document.querySelector('div.pos-move-switch');
+        this.shareSwitch = document.querySelector('div.pos-share-switch')
+
         this.btnZoomIn = document.querySelector('button.btn-zoom-in');
         this.btnZoomOut = document.querySelector('button.btn-zoom-out');
+
+        this.shareVideoEle = document.querySelector('video#share');
+        this.shareStream = null;
 
         this.initEvent();
     }
@@ -57,6 +77,8 @@ export class InterfaceManager {
 
         this.moveSwitch.addEventListener('change', (e) => this.isMoveEnabled = (e.target as any).checked);
 
+        this.shareSwitch.addEventListener('change', (e) => this.toggleShareDesktop((e.target as any).checked))
+
         this.btnZoomIn.addEventListener('click', (e) => {
             if (this.scale < 3.0) {
                 this.saveProfile();
@@ -69,6 +91,26 @@ export class InterfaceManager {
                 this.scale -= 0.05;
             }
         });
+    }
+
+    toggleShareDesktop(enabled: Boolean) {
+        if (enabled && navigator.mediaDevices.getDisplayMedia) {
+            navigator.mediaDevices.getDisplayMedia(this.gdmOptions)
+                .then(srcObj => {
+                    this.shareVideoEle.srcObject = srcObj;
+                    console.log(srcObj);
+                })
+                .catch(err => { 
+                    console.error("Error:" + err);
+                });
+        } else if (enabled) {
+            console.warn('Desktop capture api not supported.');
+        } else {
+            (this.shareVideoEle.srcObject as MediaStream).getTracks().forEach( (track) => {
+                track.stop();
+            });
+            this.shareVideoEle.srcObject = null;
+        }
     }
 
     toggleCam() {
