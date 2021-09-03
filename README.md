@@ -8,7 +8,11 @@ Check demo page here &#10132; [![demo site](https://img.shields.io/website?label
 [![twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Fhazime_nya)](https://twitter.com/hazime_nya)
 [![Youtube Badge](https://img.shields.io/badge/Youtube-ff0000?style=flat-square&logo=youtube&link=https://www.youtube.com/channel/UC-7E61IdYVFvgGHdr-EKEbQ)](https://www.youtube.com/channel/UC-7E61IdYVFvgGHdr-EKEbQ)
 
-Yea! Fucking vtuber.
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/16532326/131991248-88cf6592-9db6-46b2-a770-5c6ba08f77cb.gif" width="320"/>
+  <div>Yea! Fucking vtuber.</div>
+</div>
+
 
 
 <strong> Use pc / mac recommended. Too slow in mobile devices </strong>
