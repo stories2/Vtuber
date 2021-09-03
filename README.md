@@ -9,7 +9,7 @@ Check demo page here &#10132; [![demo site](https://img.shields.io/website?label
 [![Youtube Badge](https://img.shields.io/badge/Youtube-ff0000?style=flat-square&logo=youtube&link=https://www.youtube.com/channel/UC-7E61IdYVFvgGHdr-EKEbQ)](https://www.youtube.com/channel/UC-7E61IdYVFvgGHdr-EKEbQ)
 
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/16532326/131991248-88cf6592-9db6-46b2-a770-5c6ba08f77cb.gif" width="320"/>
+  <img src="https://user-images.githubusercontent.com/16532326/131993289-be3b0250-08e1-4119-b766-2479b653b1dc.gif" width="320"/>
   <div>Yea! Fucking vtuber.</div>
 </div>
 
