@@ -157,7 +157,10 @@ export class LAppLive2DManager {
       // console.log('projection', projection);
       model.update();
       projection.translate(interfaceManager.posX, interfaceManager.posY);
-      projection.scale(height / width * interfaceManager.scale, 1.0 * interfaceManager.scale);
+      projection.scale(
+        (height / width) * interfaceManager.scale,
+        1.0 * interfaceManager.scale
+      );
       model.draw(projection); // 参照渡しなのでprojectionは変質する。
     }
   }

@@ -113,7 +113,11 @@ export class LAppModel extends CubismUserModel {
     if (this._modelSetting.getModelFileName() != '') {
       const modelFileName = this._modelSetting.getModelFileName();
 
-      fetch(modelFileName.includes('http') ? modelFileName : `${this._modelHomeDir}${modelFileName}`)
+      fetch(
+        modelFileName.includes('http')
+          ? modelFileName
+          : `${this._modelHomeDir}${modelFileName}`
+      )
         .then(response => response.arrayBuffer())
         .then(arrayBuffer => {
           this.loadModel(arrayBuffer);
@@ -301,7 +305,9 @@ export class LAppModel extends CubismUserModel {
     // EyeBlinkIds
     const setupEyeBlinkIds = (): void => {
       const eyeBlinkIdCount: number = this._modelSetting.getEyeBlinkParameterCount();
-      console.log(`[lappmodel] [setupEyeBlinkIds] eyeBlinkIdCount: ${eyeBlinkIdCount}`)
+      console.log(
+        `[lappmodel] [setupEyeBlinkIds] eyeBlinkIdCount: ${eyeBlinkIdCount}`
+      );
 
       for (let i = 0; i < eyeBlinkIdCount; ++i) {
         this._eyeBlinkIds.pushBack(
@@ -502,9 +508,18 @@ export class LAppModel extends CubismUserModel {
     );
 
     if (faceManager.isCamAvailable) {
-      this._model.addParameterValueById(this._idParamMouthOpenY, faceManager.lipsOpen);
-      this._model.setParameterValueById(this._idParamEyeLOpen, faceManager.eyeLOpen);
-      this._model.setParameterValueById(this._idParamEyeROpen, faceManager.eyeROpen);
+      this._model.addParameterValueById(
+        this._idParamMouthOpenY,
+        faceManager.lipsOpen
+      );
+      this._model.setParameterValueById(
+        this._idParamEyeLOpen,
+        faceManager.eyeLOpen
+      );
+      this._model.setParameterValueById(
+        this._idParamEyeROpen,
+        faceManager.eyeROpen
+      );
     }
 
     // ドラッグによる体の向きの調整
@@ -544,7 +559,6 @@ export class LAppModel extends CubismUserModel {
       this._pose.updateParameters(this._model, deltaTimeSeconds);
     }
 
-    
     this._model.update();
   }
 
@@ -879,7 +893,7 @@ export class LAppModel extends CubismUserModel {
     );
     this._idParamEyeLOpen = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamEyeLOpen
-    )
+    );
 
     this._state = LoadStep.LoadAssets;
     this._expressionCount = 0;
