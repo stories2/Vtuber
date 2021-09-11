@@ -2,9 +2,12 @@
 var path = require('path');
 
 module.exports = {
-  mode: 'production',
+  mode: 'development',
   target: ['web', 'es5'],
-  entry: './src/main.ts',
+  entry: {
+    origin: { import: './src/main.ts' },
+    web: { import: './src/main.ts', filename: '../../../../../Demo/bundle.js' }
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
