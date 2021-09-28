@@ -11,7 +11,7 @@ parser: '@typescript-eslint/parser'
 parserOptions:
   sourceType: module
   ecmaVersion: 2020
-  project: ./tsconfig.json
+  project: ./CubismWebSamples/Samples/TypeScript/Demo/tsconfig.json
 rules:
   prettier/prettier:
     - error
