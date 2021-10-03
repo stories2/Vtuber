@@ -5,11 +5,14 @@ import {
 } from '@tensorflow-models/face-landmarks-detection';
 import { FaceLandmarkFrameSkip } from './lappdefine';
 import { LandMarkAnnotations } from './models/facelandmark';
+import { Modal } from 'bootstrap';
 
 export class FaceManager {
   videoEle: HTMLVideoElement;
   canvasEle: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
+  canvasCalibEle: HTMLCanvasElement;
+  calibCtx: CanvasRenderingContext2D;
   isVideoReady: boolean;
   model: any;
   cnt: number;
@@ -27,6 +30,8 @@ export class FaceManager {
 
   camStream: MediaStream;
 
+  calibrationModal: bootstrap.Modal;
+
   constructor(video: HTMLVideoElement, canvas: HTMLCanvasElement) {
     this.videoEle = video;
     this.isVideoReady = false;
@@ -35,8 +40,10 @@ export class FaceManager {
     this.canvasEle = canvas;
     this.ctx = this.canvasEle.getContext('2d');
 
-    this.canvasEle.width = 640;
-    this.canvasEle.height = 480;
+    this.canvasEle.width = 320 * window.devicePixelRatio;
+    this.canvasEle.height = 240 * window.devicePixelRatio;
+    this.canvasEle.style.width = '320px';
+    this.canvasEle.style.height = '240px';
     this.ctx.strokeStyle = 'rgba(0, 255, 0, 1)';
     this.ctx.fillStyle = 'rgba(0, 255, 0, 1)';
 
@@ -53,6 +60,22 @@ export class FaceManager {
     this.isCamAvailable = false;
 
     this.camStream = null;
+    // console.log(document.getElementById('calibration_modal'));
+    this.calibrationModal = new Modal(
+      document.getElementById('calibration_modal')
+    );
+    this.canvasCalibEle = document.querySelector('#calibration_preview');
+    this.calibCtx = this.canvasCalibEle.getContext('2d');
+
+    this.canvasCalibEle.width = 320 * window.devicePixelRatio;
+    this.canvasCalibEle.height = 240 * window.devicePixelRatio;
+    this.canvasCalibEle.style.width = '320px';
+    this.canvasCalibEle.style.height = '240px';
+    this.calibCtx.strokeStyle = 'rgba(0, 255, 0, 1)';
+    this.calibCtx.fillStyle = 'rgba(0, 255, 0, 1)';
+    console.log('canvas calib', this.canvasCalibEle);
+    // this.calibCtx.fillRect(0, 0, 100, 100);
+    // this.calibrationModal.show();
   }
 
   closeCam() {
@@ -74,8 +97,8 @@ export class FaceManager {
         navigator.mediaDevices
           .getUserMedia({
             video: {
-              width: 640,
-              height: 480,
+              width: 320,
+              height: 240,
               facingMode: 'user'
             }
           })
@@ -158,7 +181,9 @@ export class FaceManager {
       this.model.estimateFaces({ input: this.videoEle }).then((face: any[]) => {
         if (face && face.length > 0) {
           // console.log('[FaceManager] [detectLandmark] Face', face);
-          this.renderLandmark(face);
+          this.renderLandmark(face, this.canvasEle, this.ctx);
+          this.renderLandmark(face, this.canvasCalibEle, this.calibCtx);
+          // this.testRender(this.canvasCalibEle, this.calibCtx);
           this.detectFacePosition(face);
           this.detectMouthOpen(face);
           this.detectEyeLOpen(face);
@@ -265,28 +290,50 @@ export class FaceManager {
     });
   }
 
-  renderLandmark(face: any[]) {
-    this.ctx.clearRect(0, 0, this.canvasEle.width, this.canvasEle.height);
+  renderLandmark(
+    face: any[],
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D
+  ) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     face.forEach(person => {
-      this.ctx.strokeRect(
+      ctx.strokeRect(
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        person.boundingBox.topLeft[0],
+        person.boundingBox.topLeft[0] / window.devicePixelRatio,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        person.boundingBox.topLeft[1],
+        person.boundingBox.topLeft[1] / window.devicePixelRatio,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        person.boundingBox.bottomRight[0] - person.boundingBox.topLeft[0],
+        (person.boundingBox.bottomRight[0] - person.boundingBox.topLeft[0]) /
+          window.devicePixelRatio,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        person.boundingBox.bottomRight[1] - person.boundingBox.topLeft[1]
+        (person.boundingBox.bottomRight[1] - person.boundingBox.topLeft[1]) /
+          window.devicePixelRatio
       );
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       person.scaledMesh.forEach((xyz: number[]) => {
-        // ctx.strokeRect(xyz[0], xyz[1], 1, 1);
+        ctx.strokeRect(
+          xyz[0] / window.devicePixelRatio,
+          xyz[1] / window.devicePixelRatio,
+          1 / window.devicePixelRatio,
+          1 / window.devicePixelRatio
+        );
         // ctx.arc(xyz[0], xyz[1], 2, 0, Math.PI * 2, true);
-        this.ctx.beginPath();
-        this.ctx.arc(xyz[0], xyz[1], 1, 0, 2 * Math.PI);
-        this.ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(
+          xyz[0] / window.devicePixelRatio,
+          xyz[1] / window.devicePixelRatio,
+          1 / window.devicePixelRatio,
+          0,
+          2 * Math.PI
+        );
+        ctx.stroke();
       });
     });
+  }
+
+  testRender(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, 100, 100);
   }
 }

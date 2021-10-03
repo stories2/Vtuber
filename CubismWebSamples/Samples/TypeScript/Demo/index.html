@@ -35,5 +35,25 @@
   </div>
   <button type="button" class="btn btn-light btn-zoom-in">+</button>
   <button type="button" class="btn btn-light btn-zoom-out">-</button>
+
+  <button type="button" data-bs-toggle="modal" class="btn btn-light btn-cali" data-bs-target="#calibration_modal">Cali</button>
+  <div class="modal" tabindex="-1" id="calibration_modal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Calibrate face detection</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="text-align: center;">
+          <p id="calibration_info">...</p>
+          <canvas width="320" height="240" id="calibration_preview"></canvas>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="calibration_submit">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

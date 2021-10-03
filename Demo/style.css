@@ -76,3 +76,15 @@
         width: 36px;
         height: 36px;
       }
+
+      button.btn-cali {
+        position: absolute;
+        top: 208px;
+        right: 16px;
+        z-index: 9;
+      }
+      
+      canvas#calibration_preview {
+        transform: scaleX(-1);
+        pointer-events: none;
+      }
