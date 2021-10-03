@@ -183,7 +183,7 @@ export class FaceManager {
       this.model.estimateFaces({ input: this.videoEle }).then((face: any[]) => {
         if (face && face.length > 0) {
           // console.log('[FaceManager] [detectLandmark] Face', face);
-          this.renderLandmark(face, this.canvasEle, this.ctx);
+          // this.renderLandmark(face, this.canvasEle, this.ctx);
           this.renderLandmark(face, this.canvasCalibEle, this.calibCtx);
           // this.testRender(this.canvasCalibEle, this.calibCtx);
           this.detectFacePosition(face);
