@@ -42,6 +42,7 @@ export class FaceManager {
 
     this.canvasEle.width = 320 * window.devicePixelRatio;
     this.canvasEle.height = 240 * window.devicePixelRatio;
+    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     this.canvasEle.style.width = '320px';
     this.canvasEle.style.height = '240px';
     this.ctx.strokeStyle = 'rgba(0, 255, 0, 1)';
@@ -69,6 +70,7 @@ export class FaceManager {
 
     this.canvasCalibEle.width = 320 * window.devicePixelRatio;
     this.canvasCalibEle.height = 240 * window.devicePixelRatio;
+    this.calibCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
     this.canvasCalibEle.style.width = '320px';
     this.canvasCalibEle.style.height = '240px';
     this.calibCtx.strokeStyle = 'rgba(0, 255, 0, 1)';
@@ -299,34 +301,21 @@ export class FaceManager {
     face.forEach(person => {
       ctx.strokeRect(
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        person.boundingBox.topLeft[0] / window.devicePixelRatio,
+        person.boundingBox.topLeft[0],
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        person.boundingBox.topLeft[1] / window.devicePixelRatio,
+        person.boundingBox.topLeft[1],
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        (person.boundingBox.bottomRight[0] - person.boundingBox.topLeft[0]) /
-          window.devicePixelRatio,
+        person.boundingBox.bottomRight[0] - person.boundingBox.topLeft[0],
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        (person.boundingBox.bottomRight[1] - person.boundingBox.topLeft[1]) /
-          window.devicePixelRatio
+        person.boundingBox.bottomRight[1] - person.boundingBox.topLeft[1]
       );
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       person.scaledMesh.forEach((xyz: number[]) => {
-        ctx.strokeRect(
-          xyz[0] / window.devicePixelRatio,
-          xyz[1] / window.devicePixelRatio,
-          1 / window.devicePixelRatio,
-          1 / window.devicePixelRatio
-        );
+        ctx.strokeRect(xyz[0], xyz[1], 1, 1);
         // ctx.arc(xyz[0], xyz[1], 2, 0, Math.PI * 2, true);
         ctx.beginPath();
-        ctx.arc(
-          xyz[0] / window.devicePixelRatio,
-          xyz[1] / window.devicePixelRatio,
-          1 / window.devicePixelRatio,
-          0,
-          2 * Math.PI
-        );
+        ctx.arc(xyz[0], xyz[1], 1, 0, 2 * Math.PI);
         ctx.stroke();
       });
     });
