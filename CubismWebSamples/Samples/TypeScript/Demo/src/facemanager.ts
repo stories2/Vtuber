@@ -32,6 +32,9 @@ export class FaceManager {
 
   calibrationModal: bootstrap.Modal;
 
+  lastFaceData: any[];
+  caliFaceDataArray: any[];
+
   constructor(video: HTMLVideoElement, canvas: HTMLCanvasElement) {
     this.videoEle = video;
     this.isVideoReady = false;
@@ -47,6 +50,8 @@ export class FaceManager {
     this.canvasEle.style.height = '240px';
     this.ctx.strokeStyle = 'rgba(0, 255, 0, 1)';
     this.ctx.fillStyle = 'rgba(0, 255, 0, 1)';
+
+    this.caliFaceDataArray = [];
 
     this.xNormal = 0;
     this.xNormalRaw = 0;
@@ -78,6 +83,21 @@ export class FaceManager {
     console.log('canvas calib', this.canvasCalibEle);
     // this.calibCtx.fillRect(0, 0, 100, 100);
     // this.calibrationModal.show();
+
+    document
+      .querySelector('#calibration_submit')
+      .addEventListener('click', e => {
+        if (this.lastFaceData && this.lastFaceData.length > 0) {
+          this.caliFaceDataArray.push(this.lastFaceData[0]);
+          console.log(
+            'event',
+            e,
+            'face',
+            this.lastFaceData[0],
+            this.caliFaceDataArray.length
+          );
+        }
+      });
   }
 
   closeCam() {
@@ -183,6 +203,7 @@ export class FaceManager {
       this.model.estimateFaces({ input: this.videoEle }).then((face: any[]) => {
         if (face && face.length > 0) {
           // console.log('[FaceManager] [detectLandmark] Face', face);
+          this.lastFaceData = face;
           // this.renderLandmark(face, this.canvasEle, this.ctx);
           this.renderLandmark(face, this.canvasCalibEle, this.calibCtx);
           // this.testRender(this.canvasCalibEle, this.calibCtx);
