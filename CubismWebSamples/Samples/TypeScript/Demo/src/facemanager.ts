@@ -35,7 +35,7 @@ export class FaceManager {
     '#1 Come close, open your eyes, and open your mouth.',
     '#2 Come close, close your eyes, and close your mouth.',
     '#3 Open your eyes from afar and open your mouth.',
-    '#4 Close your eyes from afar and close your mouth.',
+    '#4 Close your eyes from afar and close your mouth.'
   ];
 
   lastFaceData: any[];
@@ -94,8 +94,54 @@ export class FaceManager {
     document
       .querySelector('#calibration_submit')
       .addEventListener('click', e => this.handleFaceRecorder(e));
-  }
 
+    // Test left eye blinking training
+    this.multiLinearRegression(
+      [
+        {
+          eyeLRatio: 2, //78.52242284433814,
+          faceWidth: 0 //311.54992690458096
+        },
+        {
+          eyeLRatio: 4, //92.21401979324239,
+          faceWidth: 4 //314.0681601514654
+        },
+        {
+          eyeLRatio: 6, //47.83809154009447,
+          faceWidth: 2 //309.2361478243234
+        },
+        {
+          eyeLRatio: 8, //35.3561528836868,
+          faceWidth: 3 //315.9929231310604
+        }
+      ],
+      [81, 93, 91, 97] //[1, 0, 1, 0]
+    );
+  }
+  // 0:
+  // eyeLRatio: 78.52242284433814
+  // eyeRRatio: 98.95066135513706
+  // faceRect: (2) [311.54992690458096, 299.6179553579644]
+  // faceSize: 93345.9520910738
+  // mouthRatio: 1022.6002651900551
+  // 1:
+  // eyeLRatio: 56.919258715275724
+  // eyeRRatio: 88.26489912216785
+  // faceRect: (2) [314.0681601514654, 301.510142858466]
+  // faceSize: 94694.73583456391
+  // mouthRatio: 590.7874228473529
+  // 2:
+  // eyeLRatio: 27.396415044239635
+  // eyeRRatio: 30.071441098947883
+  // faceRect: (2) [309.2361478243234, 304.5183100490239]
+  // faceSize: 94168.0691415331
+  // mouthRatio: 530.0502667257222
+  // 3:
+  // eyeLRatio: 18.145879469422393
+  // eyeRRatio: 20.266221219651488
+  // faceRect: (2) [315.9929231310604, 304.51370065116237]
+  // faceSize: 96224.1744022175
+  // mouthRatio: 202.9725724507667
   caliComment(idx: number) {
     document.querySelector(
       'p#calibration_info'
@@ -122,7 +168,138 @@ export class FaceManager {
         this.caliFaceDataArray.length
       );
     }
+    // Ready for calibration
+    if (this.caliFaceDataArray.length >= 4) {
+      this.calibrateFaceDetection();
+    }
     this.caliComment(this.caliFaceDataArray.length % 4);
+  }
+
+  calibrateFaceDetection() {
+    const data = this.caliFaceDataArray.map(face => {
+      const rect = this.faceRect(face);
+      return {
+        eyeLRatio: this.calcEyeAspectRatio([
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[263],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[387],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[385],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[362],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[380],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[373]
+        ]),
+        eyeRRatio: this.calcEyeAspectRatio([
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[33],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[160],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[158],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[133],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[153],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[144]
+        ]),
+        mouthRatio: this.calcEyeAspectRatio([
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[61],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[37],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[267],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[291],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[314],
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          face.scaledMesh[84]
+        ]),
+        faceRect: rect,
+        faceSize: rect[0] * rect[1]
+      };
+    });
+    console.log(data);
+  }
+
+  multiLinearRegression(xData: any[], yData: number[]) {
+    if (
+      xData.length <= 0 ||
+      Object.keys(xData[0]).length <= 0 ||
+      xData.length !== yData.length
+    ) {
+      return;
+    }
+    // console.log(
+    //   'Object.keys(xData[0])',
+    //   Object.keys(xData[0]),
+    //   Object.keys(xData[0]).length
+    // );
+    const alpha = new Array(Object.keys(xData[0]).length).fill(0);
+    let beta = 0;
+    const yPred = new Array(yData.length).fill(0);
+    const yError = new Array(yData.length).fill(0);
+
+    const lr = 0.02;
+    const epochs = 2001;
+
+    new Array(epochs).fill(undefined).forEach((_, step) => {
+      yPred.forEach((_, idx) => {
+        yPred[idx] = 0;
+        yError[idx] = 0;
+      });
+      // console.log('reset', yPred, yError);
+
+      xData.forEach((xDataMultiParams, idx) => {
+        Object.keys(xDataMultiParams).forEach((key, keyIdx) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          yPred[idx] += alpha[keyIdx] * xDataMultiParams[key];
+        });
+      });
+      // console.log('yPred calc alpha', yPred);
+
+      yPred.forEach((_, idx) => {
+        yPred[idx] += beta;
+        yError[idx] = yData[idx] - yPred[idx];
+      });
+      // console.log('yPred calc beta', yPred);
+      // console.log('yError', yError);
+
+      const aDiff = new Array(Object.keys(xData[0]).length).fill(0);
+      xData.forEach((xDataMultiParams, idx) => {
+        Object.keys(xDataMultiParams).forEach((key, keyIdx) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          aDiff[keyIdx] += xDataMultiParams[key] * yError[idx];
+        });
+      });
+      aDiff.forEach((_, idx) => {
+        aDiff[idx] *= -(2 / xData.length);
+      });
+      // console.log('aDiff', aDiff);
+
+      const bDiff =
+        -(2 / yData.length) * yError.reduce((p: number, c: number) => p + c);
+      // console.log('bDiff', bDiff);
+
+      alpha.forEach((_, idx) => {
+        alpha[idx] -= lr * aDiff[idx];
+      });
+      beta -= lr * bDiff;
+      // console.log('alpha', alpha, 'beta', beta);
+
+      if (step % 100 === 0)
+        console.log(`#${step}: `, aDiff, alpha, bDiff, beta);
+    });
+    return {
+      alpha,
+      beta
+    };
   }
 
   closeCam() {
