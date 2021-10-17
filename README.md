@@ -31,7 +31,7 @@ Check demo page here &#10132; [![demo site](https://img.shields.io/website?label
 - [x] Mouth close / open detection.
 - [x] Electron desktop capturing.
 - [x] Move character rendering position.
-- [ ] Calibrate feature.
+- [x] Calibrate feature. (But, need more improvements)
 - [ ] Responsive UI
 - [ ] Support PWA
 
