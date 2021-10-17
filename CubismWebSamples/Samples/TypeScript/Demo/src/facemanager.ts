@@ -105,19 +105,19 @@ export class FaceManager {
       .querySelector('#calibration_submit')
       .addEventListener('click', e => this.handleFaceRecorder(e));
     this.leftEyeModel = {
-      alpha0: 0,
-      alpha1: 0,
-      beta: 0
+      alpha0: 0.0010671667440820595,
+      alpha1: 0.0013861827921983934,
+      beta: 0.000005869564047799215
     };
     this.rightEyeModel = {
-      alpha0: 0,
-      alpha1: 0,
-      beta: 0
+      alpha0: 0.0010657022796119406,
+      alpha1: 0.001381456525117074,
+      beta: 0.000005857769237020925
     };
     this.mouthModel = {
-      alpha0: 0,
-      alpha1: 0,
-      beta: 0
+      alpha0: 0.002651445482738079,
+      alpha1: 0.0011421755006483195,
+      beta: 0.000005045844306037698
     };
   }
   // 0:
@@ -506,9 +506,12 @@ export class FaceManager {
 
       // if (this.lipsOpen > 0.5) this.lipsOpen = 1;
       // else if (this.lipsOpen < 0) this.lipsOpen = 0;
-      console.log(
-        `[FaceManager] [detectMouthOpen] mouthRatio: ${this.lipsOpen}`
-      );
+      // console.log(
+      //   `[FaceManager] [detectMouthOpen] mouthRatio: ${this.lipsOpen}`
+      // );
+      document.querySelector(
+        'span#mouth'
+      ).textContent = `${this.lipsOpen.toFixed(2)}`;
     });
   }
 
@@ -538,9 +541,12 @@ export class FaceManager {
 
       // if (this.eyeLOpen > 0.5) this.eyeLOpen = 1;
       // else if (this.eyeLOpen < 0) this.eyeLOpen = 0;
-      console.log(
-        `[FaceManager] [detectEyeLOpen] this.eyeROpen: ${this.eyeLOpen}`
-      );
+      // console.log(
+      //   `[FaceManager] [detectEyeLOpen] this.eyeROpen: ${this.eyeLOpen}`
+      // );
+      document.querySelector(
+        'span#lefteye'
+      ).textContent = `${this.eyeLOpen.toFixed(2)}`;
       // console.log(`[FaceManager] [detectEyeLOpen] up: ${eyeUpperY}, low: ${eyeLowerY}, diff: ${eyeLowerY - eyeUpperY}, ratio: ${((eyeLowerY - eyeUpperY) / h * 1000)}, isOpen: ${this.eyeLOpen}`);
     });
   }
@@ -571,9 +577,12 @@ export class FaceManager {
 
       // if (this.eyeROpen > 0.5) this.eyeROpen = 1;
       // else if (this.eyeROpen < 0) this.eyeROpen = 0;
-      console.log(
-        `[FaceManager] [detectEyeROpen] this.eyeROpen: ${this.eyeROpen}`
-      );
+      // console.log(
+      //   `[FaceManager] [detectEyeROpen] this.eyeROpen: ${this.eyeROpen}`
+      // );
+      document.querySelector(
+        'span#righteye'
+      ).textContent = `${this.eyeROpen.toFixed(2)}`;
       // console.log(`[FaceManager] [detectEyeROpen] up: ${eyeUpperY}, low: ${eyeLowerY}, diff: ${eyeLowerY - eyeUpperY}, ratio: ${((eyeLowerY - eyeUpperY) / h * 1000)}, isOpen: ${this.eyeROpen}`);
     });
   }
