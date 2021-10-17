@@ -31,6 +31,12 @@ export class FaceManager {
   camStream: MediaStream;
 
   calibrationModal: bootstrap.Modal;
+  calibrationComment = [
+    '#1 Come close, open your eyes, and open your mouth.',
+    '#2 Come close, close your eyes, and close your mouth.',
+    '#3 Open your eyes from afar and open your mouth.',
+    '#4 Close your eyes from afar and close your mouth.',
+  ];
 
   lastFaceData: any[];
   caliFaceDataArray: any[];
@@ -84,20 +90,39 @@ export class FaceManager {
     // this.calibCtx.fillRect(0, 0, 100, 100);
     // this.calibrationModal.show();
 
+    this.caliComment(this.caliFaceDataArray.length);
     document
       .querySelector('#calibration_submit')
-      .addEventListener('click', e => {
-        if (this.lastFaceData && this.lastFaceData.length > 0) {
-          this.caliFaceDataArray.push(this.lastFaceData[0]);
-          console.log(
-            'event',
-            e,
-            'face',
-            this.lastFaceData[0],
-            this.caliFaceDataArray.length
-          );
-        }
-      });
+      .addEventListener('click', e => this.handleFaceRecorder(e));
+  }
+
+  caliComment(idx: number) {
+    document.querySelector(
+      'p#calibration_info'
+    ).textContent = this.calibrationComment[idx];
+  }
+
+  // closer face with
+  // - open eyes, open mouth
+  // - close eyes, close mouth
+  // faraway face with
+  // - open eyes, open mouth
+  // - close eyes, close mouth
+  handleFaceRecorder(e) {
+    if (this.caliFaceDataArray.length >= 4) {
+      this.caliFaceDataArray.length = 0;
+    }
+    if (this.lastFaceData && this.lastFaceData.length > 0) {
+      this.caliFaceDataArray.push(this.lastFaceData[0]);
+      console.log(
+        'event',
+        e,
+        'face',
+        this.lastFaceData[0],
+        this.caliFaceDataArray.length
+      );
+    }
+    this.caliComment(this.caliFaceDataArray.length % 4);
   }
 
   closeCam() {
