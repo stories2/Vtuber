@@ -7,6 +7,12 @@ import { FaceLandmarkFrameSkip } from './lappdefine';
 import { LandMarkAnnotations } from './models/facelandmark';
 import { Modal } from 'bootstrap';
 
+interface MLR_MODEL {
+  alpha0: number;
+  alpha1: number;
+  beta: number;
+}
+
 export class FaceManager {
   videoEle: HTMLVideoElement;
   canvasEle: HTMLCanvasElement;
@@ -40,6 +46,10 @@ export class FaceManager {
 
   lastFaceData: any[];
   caliFaceDataArray: any[];
+
+  leftEyeModel: MLR_MODEL;
+  rightEyeModel: MLR_MODEL;
+  mouthModel: MLR_MODEL;
 
   constructor(video: HTMLVideoElement, canvas: HTMLCanvasElement) {
     this.videoEle = video;
@@ -94,29 +104,21 @@ export class FaceManager {
     document
       .querySelector('#calibration_submit')
       .addEventListener('click', e => this.handleFaceRecorder(e));
-
-    // Test left eye blinking training
-    this.multiLinearRegression(
-      [
-        {
-          eyeLRatio: 2, //78.52242284433814,
-          faceWidth: 0 //311.54992690458096
-        },
-        {
-          eyeLRatio: 4, //92.21401979324239,
-          faceWidth: 4 //314.0681601514654
-        },
-        {
-          eyeLRatio: 6, //47.83809154009447,
-          faceWidth: 2 //309.2361478243234
-        },
-        {
-          eyeLRatio: 8, //35.3561528836868,
-          faceWidth: 3 //315.9929231310604
-        }
-      ],
-      [81, 93, 91, 97] //[1, 0, 1, 0]
-    );
+    this.leftEyeModel = {
+      alpha0: 0,
+      alpha1: 0,
+      beta: 0
+    };
+    this.rightEyeModel = {
+      alpha0: 0,
+      alpha1: 0,
+      beta: 0
+    };
+    this.mouthModel = {
+      alpha0: 0,
+      alpha1: 0,
+      beta: 0
+    };
   }
   // 0:
   // eyeLRatio: 78.52242284433814
@@ -170,7 +172,49 @@ export class FaceManager {
     }
     // Ready for calibration
     if (this.caliFaceDataArray.length >= 4) {
-      this.calibrateFaceDetection();
+      const data = this.calibrateFaceDetection();
+      const eyeLModel = this.multiLinearRegression(
+        data.map(item => {
+          return {
+            a: item.eyeLRatio,
+            b: item.faceRect[0]
+          };
+        }),
+        [1, 0, 1, 0]
+      );
+      const eyeRModel = this.multiLinearRegression(
+        data.map(item => {
+          return {
+            a: item.eyeRRatio,
+            b: item.faceRect[0]
+          };
+        }),
+        [1, 0, 1, 0]
+      );
+      const mouthModel = this.multiLinearRegression(
+        data.map(item => {
+          return {
+            a: item.mouthRatio / 10,
+            b: item.faceRect[0]
+          };
+        }),
+        [1, 0, 1, 0]
+      );
+      this.leftEyeModel = {
+        alpha0: eyeLModel.alpha[0],
+        alpha1: eyeLModel.alpha[1],
+        beta: eyeLModel.beta
+      };
+      this.rightEyeModel = {
+        alpha0: eyeRModel.alpha[0],
+        alpha1: eyeRModel.alpha[1],
+        beta: eyeRModel.beta
+      };
+      this.mouthModel = {
+        alpha0: mouthModel.alpha[0],
+        alpha1: mouthModel.alpha[1],
+        beta: mouthModel.beta
+      };
     }
     this.caliComment(this.caliFaceDataArray.length % 4);
   }
@@ -226,6 +270,7 @@ export class FaceManager {
       };
     });
     console.log(data);
+    return data;
   }
 
   multiLinearRegression(xData: any[], yData: number[]) {
@@ -246,8 +291,8 @@ export class FaceManager {
     const yPred = new Array(yData.length).fill(0);
     const yError = new Array(yData.length).fill(0);
 
-    const lr = 0.02;
-    const epochs = 2001;
+    const lr = 0.000002;
+    const epochs = 100;
 
     new Array(epochs).fill(undefined).forEach((_, step) => {
       yPred.forEach((_, idx) => {
@@ -293,9 +338,9 @@ export class FaceManager {
       beta -= lr * bDiff;
       // console.log('alpha', alpha, 'beta', beta);
 
-      if (step % 100 === 0)
-        console.log(`#${step}: `, aDiff, alpha, bDiff, beta);
+      // if (step % 10 === 0) console.log(`#${step}: `, aDiff, alpha, bDiff, beta);
     });
+    // console.log(`#F: `, alpha, beta);
     return {
       alpha,
       beta
@@ -453,11 +498,17 @@ export class FaceManager {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         person.scaledMesh[84]
       ]);
-      this.lipsOpen = (mouthRatio - 1000) / 1000;
+      const rect = this.faceRect(person);
+      this.lipsOpen =
+        this.mouthModel.alpha0 * mouthRatio +
+        this.mouthModel.alpha1 * rect[0] +
+        this.mouthModel.beta;
 
-      if (this.lipsOpen > 0.5) this.lipsOpen = 1;
-      else if (this.lipsOpen < 0) this.lipsOpen = 0;
-      // console.log(`[FaceManager] [detectMouthOpen] mouthRatio: ${mouthRatio}`);
+      // if (this.lipsOpen > 0.5) this.lipsOpen = 1;
+      // else if (this.lipsOpen < 0) this.lipsOpen = 0;
+      console.log(
+        `[FaceManager] [detectMouthOpen] mouthRatio: ${this.lipsOpen}`
+      );
     });
   }
 
@@ -479,11 +530,17 @@ export class FaceManager {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         person.scaledMesh[373]
       ]);
-      this.eyeLOpen = (eyeRatio - 150) / 50;
+      const rect = this.faceRect(person);
+      this.eyeLOpen =
+        this.leftEyeModel.alpha0 * eyeRatio +
+        this.leftEyeModel.alpha1 * rect[0] +
+        this.leftEyeModel.beta;
 
-      if (this.eyeLOpen > 0.5) this.eyeLOpen = 1;
-      else if (this.eyeLOpen < 0) this.eyeLOpen = 0;
-      // console.log(`[FaceManager] [detectEyeLOpen] eyeRatio: ${eyeRatio}, this.eyeROpen: ${this.eyeLOpen}`);
+      // if (this.eyeLOpen > 0.5) this.eyeLOpen = 1;
+      // else if (this.eyeLOpen < 0) this.eyeLOpen = 0;
+      console.log(
+        `[FaceManager] [detectEyeLOpen] this.eyeROpen: ${this.eyeLOpen}`
+      );
       // console.log(`[FaceManager] [detectEyeLOpen] up: ${eyeUpperY}, low: ${eyeLowerY}, diff: ${eyeLowerY - eyeUpperY}, ratio: ${((eyeLowerY - eyeUpperY) / h * 1000)}, isOpen: ${this.eyeLOpen}`);
     });
   }
@@ -506,11 +563,17 @@ export class FaceManager {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         person.scaledMesh[144]
       ]);
-      this.eyeROpen = (eyeRatio - 150) / 50;
+      const rect = this.faceRect(person);
+      this.eyeROpen =
+        this.rightEyeModel.alpha0 * eyeRatio +
+        this.rightEyeModel.alpha1 * rect[0] +
+        this.rightEyeModel.beta;
 
-      if (this.eyeROpen > 0.5) this.eyeROpen = 1;
-      else if (this.eyeROpen < 0) this.eyeROpen = 0;
-      // console.log(`[FaceManager] [detectEyeROpen] eyeRatio: ${eyeRatio}, this.eyeROpen: ${this.eyeROpen}`);
+      // if (this.eyeROpen > 0.5) this.eyeROpen = 1;
+      // else if (this.eyeROpen < 0) this.eyeROpen = 0;
+      console.log(
+        `[FaceManager] [detectEyeROpen] this.eyeROpen: ${this.eyeROpen}`
+      );
       // console.log(`[FaceManager] [detectEyeROpen] up: ${eyeUpperY}, low: ${eyeLowerY}, diff: ${eyeLowerY - eyeUpperY}, ratio: ${((eyeLowerY - eyeUpperY) / h * 1000)}, isOpen: ${this.eyeROpen}`);
     });
   }
