@@ -358,9 +358,13 @@ export class FaceManager {
     } else {
       console.warn('[facemanager] [closeCam] No cam stream available.');
     }
+    this.videoEle.style.opacity = `0`;
   }
 
   openCam() {
+    if (confirm('With testing cam?')) {
+      this.videoEle.style.opacity = `1`;
+    }
     return new Promise<boolean>((resolve, reject) => {
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices
