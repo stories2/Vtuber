@@ -3,6 +3,8 @@
         margin: 0;
         overflow: hidden;
         touch-action: manipulation;
+        height: 100vh;
+        max-height: 100vh;
       }
   
       video#cam {
