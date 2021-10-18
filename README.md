@@ -33,7 +33,7 @@ Check demo page here &#10132; [![demo site](https://img.shields.io/website?label
 - [x] Move character rendering position.
 - [x] Calibrate feature. (But, need more improvements)
 - [ ] Responsive UI
-- [ ] Support PWA
+- [x] Support PWA
 
 ## Drawing process
 <div align="center">
