@@ -94,6 +94,9 @@
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./service-worker.js');
     }
+    document.ontouchmove = function(event){
+      event.preventDefault();
+    }
   </script>
 </body>
 </html>
