@@ -460,8 +460,8 @@ export class FaceManager {
           // this.testRender(this.canvasCalibEle, this.calibCtx);
           this.detectFacePosition(face);
           this.detectMouthOpen(face);
-          this.detectEyeLOpen(face);
-          this.detectEyeROpen(face);
+          // this.detectEyeLOpen(face);
+          // this.detectEyeROpen(face);
         } else {
           console.warn('[FaceManager] [detectLandmark] No face detected!');
         }
@@ -476,10 +476,11 @@ export class FaceManager {
       const [x, y] = person.annotations.noseTip[0];
       const [w, h] = this.faceRect(person);
       this.xNormalRaw = -(x / w - 0.5) * 10;
-      this.yNormalRaw = -(y / h - 0.5) * 50;
+      this.yNormalRaw = -(y / h - 0.5) * 50 + 2;
 
       this.xNormal += (this.xNormalRaw - this.xNormal) / 3;
       this.yNormal += (this.yNormalRaw - this.yNormal) / 3;
+      // console.log(this.yNormalRaw);
 
       // console.log(`xRegular, yRegular: ${this.xNormal - 0.5}, ${this.yNormal - 0.5}`)
     });

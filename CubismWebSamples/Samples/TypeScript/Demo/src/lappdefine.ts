@@ -79,4 +79,4 @@ export const CubismLoggingLevel: LogLevel = LogLevel.LogLevel_Verbose;
 export const RenderTargetWidth = 1900;
 export const RenderTargetHeight = 1000;
 
-export const FaceLandmarkFrameSkip = 10;
+export const FaceLandmarkFrameSkip = 2;

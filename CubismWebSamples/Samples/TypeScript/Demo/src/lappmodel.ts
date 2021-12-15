@@ -461,6 +461,7 @@ export class LAppModel extends CubismUserModel {
       this._dragX = this._dragManager.getX();
       this._dragY = this._dragManager.getY();
     }
+    // console.log(`drag: ${this._dragX}, ${this._dragY}`);
 
     // console.log(`drag XY: ${this._dragX}, ${this._dragY}`);
 
@@ -507,20 +508,20 @@ export class LAppModel extends CubismUserModel {
       this._dragX * this._dragY * -30
     );
 
-    if (faceManager.isCamAvailable) {
-      this._model.addParameterValueById(
-        this._idParamMouthOpenY,
-        faceManager.lipsOpen
-      );
-      this._model.setParameterValueById(
-        this._idParamEyeLOpen,
-        faceManager.eyeLOpen
-      );
-      this._model.setParameterValueById(
-        this._idParamEyeROpen,
-        faceManager.eyeROpen
-      );
-    }
+    // if (faceManager.isCamAvailable) {
+    //   this._model.addParameterValueById(
+    //     this._idParamMouthOpenY,
+    //     faceManager.lipsOpen
+    //   );
+    //   this._model.setParameterValueById(
+    //     this._idParamEyeLOpen,
+    //     faceManager.eyeLOpen
+    //   );
+    //   this._model.setParameterValueById(
+    //     this._idParamEyeROpen,
+    //     faceManager.eyeROpen
+    //   );
+    // }
 
     // ドラッグによる体の向きの調整
     this._model.addParameterValueById(
