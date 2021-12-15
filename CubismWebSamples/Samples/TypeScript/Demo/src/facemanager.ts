@@ -51,6 +51,9 @@ export class FaceManager {
   rightEyeModel: MLR_MODEL;
   mouthModel: MLR_MODEL;
 
+  lastBlink: number;
+  lastBlinkTime: number;
+
   constructor(video: HTMLVideoElement, canvas: HTMLCanvasElement) {
     this.videoEle = video;
     this.isVideoReady = false;
@@ -96,6 +99,7 @@ export class FaceManager {
     this.canvasCalibEle.style.height = '240px';
     this.calibCtx.strokeStyle = 'rgba(0, 255, 0, 1)';
     this.calibCtx.fillStyle = 'rgba(0, 255, 0, 1)';
+    this.derivativeTimeBaseBlink(this.cnt);
     console.log('canvas calib', this.canvasCalibEle);
     // this.calibCtx.fillRect(0, 0, 100, 100);
     // this.calibrationModal.show();
@@ -148,6 +152,37 @@ export class FaceManager {
     document.querySelector(
       'p#calibration_info'
     ).textContent = this.calibrationComment[idx];
+  }
+
+  degree2Radius(degree) {
+    return (Math.PI / 180) * degree;
+  }
+
+  timeBaseBlink(time: number) {
+    // console.log(
+    //   'time',
+    //   time,
+    //   'rad',
+    //   this.degree2Radius(time),
+    //   'sin',
+    //   Math.sin(this.degree2Radius(time) * 0.75),
+    //   'abs',
+    //   Math.abs(Math.sin(this.degree2Radius(time) * 0.75)),
+    //   'tanh',
+    //   Math.tanh(Math.sin(this.degree2Radius(time)) * 100)
+    // );
+    return Math.tanh(Math.abs(Math.sin(this.degree2Radius(time) * 0.6)) * 100);
+  }
+
+  derivativeTimeBaseBlink(time: number) {
+    const blinkGap =
+      this.timeBaseBlink(time) - this.timeBaseBlink(this.lastBlinkTime);
+    this.lastBlink = 1 - Math.abs(blinkGap / (this.lastBlinkTime - time));
+    // console.log('sec', this.lastBlinkTime - time, 'gap', blinkGap);
+    if (isNaN(this.lastBlink)) {
+      this.lastBlink = 1;
+    }
+    this.lastBlinkTime = time;
   }
 
   // closer face with
@@ -462,6 +497,10 @@ export class FaceManager {
           this.detectMouthOpen(face);
           // this.detectEyeLOpen(face);
           // this.detectEyeROpen(face);
+          this.derivativeTimeBaseBlink(this.cnt);
+          this.eyeLOpen = this.lastBlink;
+          this.eyeROpen = this.lastBlink;
+          // console.log('derivate', this.lastBlink);
         } else {
           console.warn('[FaceManager] [detectLandmark] No face detected!');
         }
