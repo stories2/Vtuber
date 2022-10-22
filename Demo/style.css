@@ -6,6 +6,7 @@
         height: 100vh;
         max-height: 100vh;
         position: fixed;
+        background-color: white;
       }
   
       video#cam {
